@@ -13,7 +13,7 @@
 }
 
 html, body {
-  background-color: #E9E5DD;
+  background-color: #ffffff;
   color: #292827;
   font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-feature-settings: "ss01", "cv11";
@@ -39,15 +39,51 @@ html, body {
   max-width: 65ch;
 }
 
-/* Selection sits on cream — keep it calm. */
+/* Selection — purple-60 over white. */
 ::selection {
-  background: #4B3A5A;
-  color: #F4F1EB;
+  background: #714cb6;
+  color: #f7f5f2;
 }
 
-/* Default focus visible — restrained, no shadow-2xl glow. */
+/* Default focus visible — purple-60 ring, no glow. */
 :focus-visible {
-  outline: 2px solid #4B3A5A;
+  outline: 2px solid #714cb6;
   outline-offset: 2px;
   border-radius: 6px;
+}
+
+/* -------------------------------------------------------------
+   Hero video placeholder — visible only when /public/hero-bg.*
+   files are absent. Slow drifting neutral-tone gradient so
+   the layer is perceptible until the real footage is dropped in.
+   ------------------------------------------------------------- */
+.hero-video-placeholder {
+  /* Mirrors superhuman.com's .hero-background-video — light blue → deep
+     navy base with a lavender/lilac diagonal wash. Visible only when the
+     /public/hero-bg.* assets are missing or before they decode. */
+  background:
+    linear-gradient(to bottom left,
+      rgba(168, 164, 216, 0.5),
+      rgba(107, 165, 232, 0.5),
+      rgba(176, 112, 192, 0.6),
+      rgba(144, 136, 208, 0.5)),
+    linear-gradient(180deg, #7c9ad3, #314682);
+  background-size: 140% 140%, 100% 100%;
+  background-position: 0% 0%, 50% 50%;
+  animation: hero-drift 24s ease-in-out infinite alternate;
+}
+
+@keyframes hero-drift {
+  0% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+  }
+  100% {
+    background-position: 100% 50%, 0% 0%, 50% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video-placeholder {
+    animation: none;
+  }
 }

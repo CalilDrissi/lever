@@ -33,7 +33,7 @@ export const copy = {
         "L'algorithme Domino trouve l'email à plus haut levier — tu fais le reste.",
       ctaPrimary: "Commencer — 14 jours offerts",
       ctaSecondary: "Voir une démo (90 sec)",
-      microproof: "Sans carte bancaire · Gmail & Outlook",
+      microproof: "Sans carte bancaire · Compatible avec toutes les boîtes",
     },
     inbox: {
       heading: "Boîte de réception",
@@ -55,10 +55,89 @@ export const copy = {
         { from: "Karim Nadir",       subject: "Brief — page d'accueil", time: "07:58", muted: false },
       ],
     },
-    trustedBy: {
-      label: "Utilisé par des équipes chez",
-      // Placeholders kept generic — swap once partners are confirmed.
-      logos: ["Atelier Verso", "Maison Petit", "Studio Nord", "Ligne Claire", "Champ Libre", "Remue-Méninges"],
+    inboxDemo: {
+      eyebrow: "Démo interactive",
+      title: "Essaie le triage. Pas de carte. Pas d'inscription.",
+      sub:
+        "Clique sur les actions ci-dessous : Lever sort le Domino traité, " +
+        "remonte le suivant, et les compteurs s'ajustent en temps réel.",
+      shortcuts: [
+        { keys: ["O"],     label: "Ouvrir le Domino" },
+        { keys: ["E"],     label: "Marquer comme traité" },
+        { keys: ["⇧", "S"], label: "Reporter à demain" },
+        { keys: ["⌘", "K"], label: "Recherche partout" },
+      ],
+      stats: {
+        backlog: "Backlog",
+        score: "Score levier",
+        elapsed: "Temps écoulé",
+      },
+      // Pool of dominos that cycle as the user acts. Each domino brings
+      // its own neighbours so the list under it shifts too.
+      pool: [
+        {
+          id: "atelier-verso",
+          from: "Camille — Atelier Verso",
+          subject: "Devis signé — prochaines étapes",
+          preview:
+            "On valide le périmètre. Si tu confirmes avant vendredi, on cale le kickoff lundi…",
+          score: 92,
+        },
+        {
+          id: "lea-bernard",
+          from: "Léa Bernard",
+          subject: "Re: planning Q3 — décision attendue",
+          preview:
+            "Trois pistes possibles. Ton arbitrage débloque deux personnes côté studio.",
+          score: 88,
+        },
+        {
+          id: "karim-nadir",
+          from: "Karim Nadir",
+          subject: "Brief — page d'accueil v2",
+          preview:
+            "Le brief est prêt. Si tu valides avant demain, on tient la livraison.",
+          score: 81,
+        },
+        {
+          id: "fanny-doc",
+          from: "Fanny Bouvier",
+          subject: "Contrat — relecture finale",
+          preview:
+            "Deux ajustements de wording. À signer avant la fin de semaine si OK.",
+          score: 78,
+        },
+      ],
+    },
+    providers: {
+      // Provider marquee shown directly under the hero — visual proof that
+      // Lever connects to every common inbox. Logos render in their real
+      // brand colors (Wikimedia Commons + simple-icons, rasterized via
+      // .tmp/build-providers.mjs into /public/logos/).
+      label: "Connecte ta boîte en 30 secondes",
+      list: [
+        { name: "Gmail",        file: "/logos/gmail.png"   },
+        { name: "Outlook",      file: "/logos/outlook.png" },
+        { name: "Apple iCloud", file: "/logos/icloud.png"  },
+        { name: "Proton Mail",  file: "/logos/proton.png"  },
+        { name: "HEY",          file: "/logos/hey.png"     },
+        { name: "Zoho Mail",    file: "/logos/zoho.png"    },
+      ],
+    },
+    compatibility: {
+      eyebrow: "Sécurité & compatibilité",
+      title: "Compatible avec toutes tes boîtes.",
+      sub:
+        "Lever ne dépend d'aucun fournisseur. Connecte ton client favori " +
+        "en lecture seule — l'algorithme Domino fait le reste.",
+      // Generic feature pills shown beneath the headline. No specific
+      // provider names — the section celebrates universal compatibility.
+      pills: [
+        { label: "OAuth standard",     icon: "key" },
+        { label: "IMAP & SMTP",        icon: "server" },
+        { label: "API officielles",    icon: "plug" },
+        { label: "Tous fournisseurs",  icon: "infinity" },
+      ],
     },
     pillars: {
       heading: "Quatre leviers, un seul cockpit.",
@@ -101,13 +180,46 @@ export const copy = {
         },
       ],
     },
+    showcase: {
+      eyebrow: "Pour qui",
+      heading: "Pour celles et ceux qui décident, pas qui répondent.",
+      sub:
+        "Lever a été pensé pour trois usages quotidiens. " +
+        "Le même cockpit, des angles différents.",
+      cards: [
+        {
+          key: "focus",
+          tag: "Focus solo",
+          title: "Une session de 10 minutes, le matin.",
+          body:
+            "Tu ouvres Lever, tu vois le Domino, tu décides. " +
+            "Le reste attendra l'après-midi — ou demain.",
+        },
+        {
+          key: "desk",
+          tag: "Travail profond",
+          title: "Protéger les blocs de concentration.",
+          body:
+            "Lever met en sourdine les newsletters, les notifications " +
+            "et les CC inutiles. Tu reviens à un inbox lisible.",
+        },
+        {
+          key: "team",
+          tag: "Petites équipes",
+          title: "Des décisions partagées, sans réunion.",
+          body:
+            "Marque un fil comme « en attente de Karim » : Lever te rappelle " +
+            "au bon moment, et propose la relance.",
+        },
+      ],
+    },
     how: {
       heading: "Comment ça marche.",
       steps: [
         {
           n: "01",
           title: "Connecte ta boîte.",
-          body: "Gmail ou Outlook. OAuth, lecture chiffrée, rien n'est stocké en clair.",
+          body: "Quel que soit ton fournisseur. OAuth, lecture chiffrée, rien n'est stocké en clair.",
         },
         {
           n: "02",
@@ -136,12 +248,80 @@ export const copy = {
         "OAuth read-only par défaut. Chiffrement AES-256 au repos, TLS 1.3 en transit. " +
         "Tu peux exporter ou tout supprimer en une action.",
       points: [
-        "OAuth Gmail / Microsoft 365",
+        "OAuth standard, tous fournisseurs",
         "Chiffrement AES-256 au repos",
         "TLS 1.3 en transit",
         "SOC 2 Type II en cours",
         "Hébergement UE — Francfort",
         "Suppression irréversible en 24 h",
+      ],
+    },
+    pricing: {
+      eyebrow: "Tarifs",
+      title: "Deux offres. Zéro surprise.",
+      sub:
+        "Essai 14 jours, sans carte. Choisis le rythme qui t'arrange — " +
+        "tu peux changer ou annuler à tout moment.",
+      // Two billing modes — the section toggles between them.
+      monthly: {
+        label: "Mensuel",
+        savings: null as string | null,
+      },
+      annual: {
+        label: "Annuel",
+        savings: "−17 %",
+      },
+      microproof: "Pas de carte bancaire. Annulation en un clic.",
+      includes: "Inclus dans cette offre :",
+      trust: [
+        "OAuth read-only",
+        "AES-256",
+        "TLS 1.3",
+        "Hébergement UE",
+      ],
+      plans: [
+        {
+          key: "lever",
+          name: "Lever",
+          tagline: "Le cockpit complet pour ta boîte.",
+          featured: true,
+          highlightLabel: "Recommandé",
+          monthlyPrice: 18,
+          annualPrice: 15,
+          unit: "€",
+          cadence: "/ mois",
+          monthlyNote: "facturé chaque mois",
+          annualNote: "facturé 180 € / an",
+          cta: "Commencer l'essai — 14 jours",
+          features: [
+            "Algorithme Domino — l'email à plus haut levier, chaque jour",
+            "Triage automatique : newsletters, notifications, CC silenciés",
+            "Relances calibrées et brouillons générés",
+            "Analytique hebdo — backlog, capacité, fils résolus",
+            "Compatible avec toutes les boîtes (OAuth, IMAP, API)",
+            "Support FR/EN sous 24 h en jour ouvré",
+          ],
+        },
+        {
+          key: "enterprise",
+          name: "Enterprise",
+          tagline: "Pour les équipes qui exigent plus.",
+          featured: false,
+          highlightLabel: null,
+          // Custom-price plan — billing toggle is ignored; the price block
+          // shows a label instead of a number.
+          customLabel: "Sur mesure",
+          customSub: "à partir de 12 € / mois / siège",
+          cta: "Parler à l'équipe",
+          features: [
+            "Tout ce qu'il y a dans Lever",
+            "SSO / SAML, SCIM provisioning",
+            "Audit logs et politiques de rétention",
+            "Hébergement dédié, région au choix",
+            "Support prioritaire 24/7",
+            "DPA, SLA et contrats personnalisés",
+          ],
+        },
       ],
     },
     faq: {
@@ -167,7 +347,7 @@ export const copy = {
         {
           q: "Compatible avec Superhuman, Hey, Spark ?",
           a:
-            "Lever fonctionne en surcouche de Gmail et Outlook. Tu peux garder ton client préféré et utiliser Lever pour le triage.",
+            "Lever fonctionne en surcouche de ton client email — quel qu'il soit. Tu peux garder ton client préféré et utiliser Lever pour le triage.",
         },
         {
           q: "Combien ça coûte ?",
@@ -177,9 +357,28 @@ export const copy = {
       ],
     },
     finalCta: {
+      eyebrow: "Essai gratuit · 14 jours",
       title: "Une priorité par jour. Pendant deux semaines. Gratuit.",
-      sub: "Tu verras la différence avant la fin de la semaine.",
+      sub:
+        "Pas de carte bancaire. Pas de tunnel d'onboarding. " +
+        "Tu connectes ta boîte, et l'après-midi qui suit te paraît plus long.",
       cta: "Commencer maintenant",
+      ctaSecondary: "Parler à l'équipe",
+      stats: [
+        { value: "10", unit: "min/jour", label: "de triage" },
+        { value: "−30", unit: "%", label: "de backlog en 2 semaines" },
+        { value: "92", unit: "/100", label: "score levier moyen" },
+      ],
+    },
+    newsletter: {
+      eyebrow: "Lettre Lever",
+      title: "Une lettre par mois. Aucune notification.",
+      sub:
+        "Outils, idées et expériences pour une boîte plus calme. " +
+        "Tu te désabonnes en un clic — la confiance compte plus que la liste.",
+      placeholder: "ton@adresse.com",
+      cta: "S'inscrire",
+      microproof: "1 200 lecteurs · zéro spam · jamais revendu",
     },
     footer: {
       tagline: "Le levier d'Archimède, version inbox.",
@@ -188,7 +387,7 @@ export const copy = {
         { heading: "Société", links: ["Manifeste", "À propos", "Contact"] },
         { heading: "Légal",   links: ["Confidentialité", "CGU", "DPA", "Sous-traitants"] },
       ],
-      copyright: "© 2026 Virtus Lever — fait à Paris, calmement.",
+      copyright: "© 2026 Virtus Lever — Made in France.",
     },
   },
 
