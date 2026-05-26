@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Virtus Lever — Guide d'équipe</title>
+<style>
+  /* -------------------------------------------------------------- */
+  /* Page setup                                                     */
+  /* -------------------------------------------------------------- */
+  @page {
+    size: A4;
+    margin: 24mm 18mm 22mm 18mm;
+    @bottom-left {
+      content: "Virtus Lever — Guide d'équipe";
+      font-family: "Inter", "Helvetica Neue", sans-serif;
+      font-size: 8pt;
+      color: #73716d;
+    }
+    @bottom-right {
+      content: "p. " counter(page) " / " counter(pages);
+      font-family: "Inter", "Helvetica Neue", sans-serif;
+      font-size: 8pt;
+      color: #73716d;
+    }
+  }
+  @page :first {
+    margin: 0;
+    @bottom-left { content: ""; }
+    @bottom-right { content: ""; }
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Base type                                                      */
+  /* -------------------------------------------------------------- */
+  * { box-sizing: border-box; }
+  html, body {
+    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: #292827;
+    margin: 0;
+  }
+  h1, h2, h3, h4 {
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    margin: 0;
+    color: #141413;
+  }
+  p { margin: 0 0 8pt; }
+  a { color: #533192; text-decoration: none; }
+  code, kbd {
+    font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 9.5pt;
+    background: #f2f0eb;
+    color: #292827;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid #dedbd5;
+  }
+  pre {
+    font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 9pt;
+    line-height: 1.5;
+    background: #f7f5f2;
+    color: #292827;
+    padding: 10pt 12pt;
+    border-radius: 6px;
+    border: 1px solid #dedbd5;
+    margin: 6pt 0 12pt;
+    white-space: pre-wrap;
+    word-break: break-word;
+    page-break-inside: avoid;
+  }
+  pre code { background: transparent; border: 0; padding: 0; }
+  ul, ol { margin: 0 0 10pt; padding-left: 18pt; }
+  li { margin-bottom: 4pt; }
+  strong { color: #141413; }
+  hr {
+    border: 0;
+    border-top: 1px solid #dedbd5;
+    margin: 14pt 0;
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Cover page                                                     */
+  /* -------------------------------------------------------------- */
+  .cover {
+    page-break-after: always;
+    height: 297mm;
+    width: 210mm;
+    padding: 28mm 24mm;
+    background:
+      linear-gradient(to bottom left,
+        rgba(168,164,216,0.5),
+        rgba(107,165,232,0.5),
+        rgba(176,112,192,0.6),
+        rgba(144,136,208,0.5)),
+      linear-gradient(180deg, #7c9ad3, #314682);
+    color: #ffffff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover-top {
+    display: flex;
+    align-items: center;
+    gap: 10pt;
+  }
+  .cover-mark {
+    width: 38pt; height: 38pt;
+    background: #ffffff;
+    color: #141413;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: serif;
+    font-weight: 700;
+    font-size: 22pt;
+  }
+  .cover-brand {
+    font-weight: 600;
+    font-size: 16pt;
+    letter-spacing: -0.015em;
+  }
+  .cover-title {
+    font-weight: 600;
+    font-size: 44pt;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    max-width: 17ch;
+  }
+  .cover-sub {
+    margin-top: 16pt;
+    font-size: 13pt;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.82);
+    max-width: 45ch;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 28pt;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    padding-top: 16pt;
+  }
+  .cover-meta-label {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 8pt;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 4pt;
+  }
+  .cover-meta-value {
+    font-size: 11pt;
+    color: rgba(255,255,255,0.92);
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Section headers                                                */
+  /* -------------------------------------------------------------- */
+  .section {
+    page-break-before: always;
+  }
+  .section:first-of-type { page-break-before: avoid; }
+  .section-eyebrow {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 8pt;
+    color: #73716d;
+    padding: 2pt 8pt;
+    border: 1px solid #dedbd5;
+    background: #f7f5f2;
+    border-radius: 4px;
+    margin-bottom: 10pt;
+  }
+  h1.section-title {
+    font-size: 26pt;
+    line-height: 1.1;
+    letter-spacing: -0.022em;
+    margin: 0 0 8pt;
+    color: #141413;
+  }
+  .section-lead {
+    font-size: 11pt;
+    line-height: 1.55;
+    color: #474543;
+    max-width: 62ch;
+    margin-bottom: 18pt;
+  }
+  h2 {
+    font-size: 14pt;
+    line-height: 1.25;
+    margin-top: 18pt;
+    margin-bottom: 6pt;
+  }
+  h3 {
+    font-size: 11pt;
+    line-height: 1.35;
+    margin-top: 12pt;
+    margin-bottom: 4pt;
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Callouts                                                       */
+  /* -------------------------------------------------------------- */
+  .note, .warn, .tip {
+    border-radius: 6px;
+    padding: 10pt 12pt;
+    margin: 10pt 0;
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+  .note  { background: #f7f5ff; border-left: 3px solid #714cb6; color: #292827; }
+  .warn  { background: #fff3e1; border-left: 3px solid #c25000; color: #292827; }
+  .tip   { background: #f4fdfa; border-left: 3px solid #148072; color: #292827; }
+  .note strong, .warn strong, .tip strong { font-weight: 600; }
+  .label {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 7.5pt;
+    font-weight: 600;
+    margin-right: 8pt;
+  }
+  .note .label  { color: #533192; }
+  .warn .label  { color: #c25000; }
+  .tip .label   { color: #148072; }
+
+  /* -------------------------------------------------------------- */
+  /* Stack list                                                     */
+  /* -------------------------------------------------------------- */
+  .stack {
+    margin: 8pt 0 14pt;
+    padding: 0;
+    list-style: none;
+    display: block;
+  }
+  .stack li {
+    border: 1px solid #dedbd5;
+    border-radius: 6px;
+    padding: 8pt 12pt;
+    margin-bottom: 6pt;
+    page-break-inside: avoid;
+  }
+  .stack-name {
+    font-weight: 600;
+    color: #141413;
+  }
+  .stack-role {
+    color: #474543;
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Two-col table for the project map                              */
+  /* -------------------------------------------------------------- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6pt 0 14pt;
+    font-size: 9.5pt;
+  }
+  th, td {
+    text-align: left;
+    padding: 7pt 10pt;
+    border-bottom: 1px solid #dedbd5;
+    vertical-align: top;
+  }
+  thead th {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 8pt;
+    color: #73716d;
+    background: #f7f5f2;
+    font-weight: 500;
+    border-bottom: 1px solid #dedbd5;
+  }
+  td code {
+    font-size: 8.5pt;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: #533192;
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Numbered step list (the deploy how-to)                          */
+  /* -------------------------------------------------------------- */
+  ol.steps {
+    list-style: none;
+    counter-reset: step;
+    padding: 0;
+    margin: 0;
+  }
+  ol.steps > li {
+    counter-increment: step;
+    padding: 8pt 0 14pt 36pt;
+    position: relative;
+    border-bottom: 1px solid #f2f0eb;
+    page-break-inside: avoid;
+  }
+  ol.steps > li:last-child { border-bottom: 0; }
+  ol.steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 8pt;
+    width: 24pt; height: 24pt;
+    border-radius: 999px;
+    background: #141413;
+    color: #ffffff;
+    font-family: "SFMono-Regular", Menlo, monospace;
+    font-weight: 600;
+    font-size: 10pt;
+    line-height: 24pt;
+    text-align: center;
+  }
+  ol.steps > li h3 {
+    margin-top: 2pt;
+    font-size: 12pt;
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Small utility                                                  */
+  /* -------------------------------------------------------------- */
+  .kbd {
+    display: inline-block;
+    background: #f7f5f2;
+    border: 1px solid #dedbd5;
+    border-radius: 3px;
+    padding: 0 5px;
+    font-family: monospace;
+    font-size: 9pt;
+  }
+  .pill {
+    display: inline-block;
+    background: #e8e0ff;
+    color: #3f256f;
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-left: 4pt;
+  }
+  .footer-note {
+    font-size: 9pt;
+    color: #73716d;
+    margin-top: 18pt;
+    padding-top: 10pt;
+    border-top: 1px solid #dedbd5;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================== -->
+<!-- COVER                                                          -->
+<!-- ============================================================== -->
+<div class="cover">
+  <div class="cover-top">
+    <span class="cover-mark">V</span>
+    <span class="cover-brand">Virtus Lever</span>
+  </div>
+
+  <div>
+    <h1 class="cover-title">Guide d'édition et de déploiement du site.</h1>
+    <p class="cover-sub">
+      Comment travailler sur <strong style="color:#ffffff">virtuslever.com</strong> —
+      la stack, les fichiers à connaître, et la procédure complète pour
+      publier une nouvelle version.
+    </p>
+  </div>
+
+  <div class="cover-meta">
+    <div>
+      <div class="cover-meta-label">Site</div>
+      <div class="cover-meta-value">virtuslever.com</div>
+    </div>
+    <div>
+      <div class="cover-meta-label">Hébergement</div>
+      <div class="cover-meta-value">Cloudflare Pages</div>
+    </div>
+    <div>
+      <div class="cover-meta-label">Source</div>
+      <div class="cover-meta-value">github.com/CalilDrissi/lever</div>
+    </div>
+    <div>
+      <div class="cover-meta-label">Public</div>
+      <div class="cover-meta-value">Équipe Virtus Lever</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- 01 — APERÇU                                                    -->
+<!-- ============================================================== -->
+<section class="section">
+  <span class="section-eyebrow">01 · Aperçu</span>
+  <h1 class="section-title">Ce que c'est, où ça vit.</h1>
+  <p class="section-lead">
+    Le site <strong>virtuslever.com</strong> est une landing page statique
+    générée par Next.js. Chaque commit poussé sur la branche
+    <code>main</code> du dépôt déclenche un build et un déploiement
+    automatique vers Cloudflare Pages.
+  </p>
+
+  <h2>Adresses utiles</h2>
+  <table>
+    <tbody>
+      <tr><td><strong>Production</strong></td><td><a href="https://virtuslever.com">https://virtuslever.com</a></td></tr>
+      <tr><td><strong>Page de style</strong></td><td><a href="https://virtuslever.com/styleguide/">https://virtuslever.com/styleguide/</a> — réference visuelle des couleurs, typo et composants.</td></tr>
+      <tr><td><strong>Dépôt GitHub</strong></td><td><a href="https://github.com/CalilDrissi/lever">github.com/CalilDrissi/lever</a></td></tr>
+      <tr><td><strong>Dashboard Cloudflare</strong></td><td>Workers &amp; Pages → projet <code>virtus-lever</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <span class="label">À retenir</span>
+    Les URLs <code>*.pages.dev</code> sont volontairement bloquées : un
+    redirect 301 renvoie toujours vers <code>virtuslever.com</code> afin
+    d'éviter le contenu dupliqué côté SEO. Pas la peine de les partager,
+    elles n'affichent plus le site.
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<!-- 02 — STACK                                                     -->
+<!-- ============================================================== -->
+<section class="section">
+  <span class="section-eyebrow">02 · Stack technique</span>
+  <h1 class="section-title">Les outils qui font tourner le site.</h1>
+  <p class="section-lead">
+    Site statique généré au build : aucun serveur Node ne tourne en
+    production. Tout est précompilé en HTML/CSS/JS et servi depuis le
+    CDN Cloudflare.
+  </p>
+
+  <ul class="stack">
+    <li><span class="stack-name">Next.js 14 · App Router</span><br/>
+      <span class="stack-role">Framework React. Configuré en <code>output: "export"</code> pour générer un site 100% statique.</span></li>
+    <li><span class="stack-name">TypeScript</span><br/>
+      <span class="stack-role">Typage strict. <code>npm run typecheck</code> garde la base saine.</span></li>
+    <li><span class="stack-name">Tailwind CSS 3</span><br/>
+      <span class="stack-role">Système de tokens dans <code>tailwind.config.ts</code>. La palette est calquée sur celle de Superhuman (neutral, purple, mulberry, green, …).</span></li>
+    <li><span class="stack-name">framer-motion</span><br/>
+      <span class="stack-role">Toutes les animations (parallax, fade-up, marquee, score gauge). Respecte <code>prefers-reduced-motion</code>.</span></li>
+    <li><span class="stack-name">lucide-react</span><br/>
+      <span class="stack-role">Bibliothèque d'icônes. Pas d'emoji dans l'UI.</span></li>
+    <li><span class="stack-name">Cloudflare Pages</span><br/>
+      <span class="stack-role">Hébergement, CDN, certificat SSL. Une fonction edge (<code>functions/_middleware.js</code>) gère les redirects canoniques.</span></li>
+    <li><span class="stack-name">Node 20</span><br/>
+      <span class="stack-role">Version cible pour les builds (locaux et CI).</span></li>
+  </ul>
+</section>
+
+<!-- ============================================================== -->
+<!-- 03 — ARBRE DU PROJET                                           -->
+<!-- ============================================================== -->
+<section class="section">
+  <span class="section-eyebrow">03 · Structure du projet</span>
+  <h1 class="section-title">Où trouver quoi.</h1>
+  <p class="section-lead">
+    Les dossiers à connaître. La grande majorité des modifications de
+    contenu se passent dans <code>lib/copy.ts</code> ; les ajustements
+    visuels dans <code>tailwind.config.ts</code> et les fichiers de
+    <code>components/sections/</code>.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Chemin</th><th>Rôle</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>app/</code></td><td>Pages Next.js. <code>page.tsx</code> compose toutes les sections, <code>layout.tsx</code> contient le <code>&lt;head&gt;</code> et les meta tags SEO.</td></tr>
+      <tr><td><code>app/styleguide/</code></td><td>Page <code>/styleguide</code> — la référence vivante de tous les tokens et composants.</td></tr>
+      <tr><td><code>components/sections/</code></td><td>Une section par fichier (<code>hero.tsx</code>, <code>pricing.tsx</code>, <code>faq.tsx</code>, etc.). Chacun est self-contained.</td></tr>
+      <tr><td><code>components/ui/</code></td><td>Composants atomiques réutilisables (<code>Button</code>, <code>Badge</code>, <code>Card</code>, <code>Input</code>).</td></tr>
+      <tr><td><code>components/illustrations/</code></td><td>Illustrations SVG inline (les 4 vignettes des piliers).</td></tr>
+      <tr><td><code>lib/copy.ts</code></td><td><strong>Toute la copie du site</strong>, en FR et EN. Source unique de vérité — éditer ici plutôt que dans les composants.</td></tr>
+      <tr><td><code>lib/images.ts</code></td><td>Référence centralisée des photos Pexels utilisées dans les sections.</td></tr>
+      <tr><td><code>lib/asset.ts</code></td><td>Helper <code>asset()</code> pour les chemins d'asset manuels. À utiliser pour toute référence vers <code>/public/</code> qui n'est pas un <code>next/image</code> ou <code>next/link</code>.</td></tr>
+      <tr><td><code>public/</code></td><td>Assets servis tels quels (logos PNG des fournisseurs, vidéo hero, favicons).</td></tr>
+      <tr><td><code>functions/</code></td><td>Edge functions Cloudflare. <code>_middleware.js</code> renvoie un 301 de <code>*.pages.dev</code> vers <code>virtuslever.com</code>.</td></tr>
+      <tr><td><code>tailwind.config.ts</code></td><td>Couleurs, typographie (clamp fluide), spacing, radius, shadows.</td></tr>
+      <tr><td><code>next.config.mjs</code></td><td>Configuration de build (export statique, images, basePath conditionnel).</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============================================================== -->
+<!-- 04 — DÉVELOPPEMENT LOCAL                                       -->
+<!-- ============================================================== -->
+<section class="section">
+  <span class="section-eyebrow">04 · Développement local</span>
+  <h1 class="section-title">Faire tourner le site sur ta machine.</h1>
+  <p class="section-lead">
+    Prérequis : <strong>Node 20+</strong> et <strong>npm</strong>. Sur
+    Mac : <code>brew install node</code>. Sur Windows : installer depuis
+    <a href="https://nodejs.org">nodejs.org</a>.
+  </p>
+
+  <h2>Cloner et installer</h2>
+<pre><code>git clone https://github.com/CalilDrissi/lever.git
+cd lever
+npm install</code></pre>
+
+  <h2>Lancer le serveur de développement</h2>
+<pre><code>npm run dev</code></pre>
+  <p>Le site est disponible sur <code>http://localhost:3000</code>.
+  Les modifications sont reflétées en direct (Fast Refresh).</p>
+
+  <h2>Commandes utiles</h2>
+  <table>
+    <thead><tr><th>Commande</th><th>Effet</th></tr></thead>
+    <tbody>
+      <tr><td><code>npm run dev</code></td><td>Lance le serveur de dev sur le port 3000.</td></tr>
+      <tr><td><code>npm run build</code></td><td>Génère le site statique dans <code>out/</code>.</td></tr>
+      <tr><td><code>npm run typecheck</code></td><td>Vérifie les types TypeScript (sans build).</td></tr>
+      <tr><td><code>npm run lint</code></td><td>Lance l'ESLint Next.js.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <span class="label">Astuce</span>
+    Toujours lancer <code>npm run typecheck</code> avant de pousser un
+    commit. Une erreur de type empêche le déploiement.
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<!-- 05 — MODIFIER LE CONTENU                                       -->
+<!-- ============================================================== -->
+<section class="section">
+  <span class="section-eyebrow">05 · Modifier le contenu</span>
+  <h1 class="section-title">Changer un texte, un tarif, une FAQ.</h1>
+  <p class="section-lead">
+    Toute la copie du site vit dans <code>lib/copy.ts</code>. Pour
+    éditer un titre, un prix ou une question, il suffit d'ouvrir ce
+    fichier — pas besoin d'aller chercher dans les composants.
+  </p>
+
+  <h2>Structure du fichier</h2>
+  <p>Le fichier exporte un objet <code>copy</code> avec deux clés :
+  <code>fr</code> (français — utilisé par le site) et <code>en</code>
+  (anglais — miroir prêt pour une future internationalisation, pas
+  encore branché à l'UI).</p>
+
+  <h2>Exemples</h2>
+
+  <h3>Changer le titre du hero</h3>
+<pre><code>// lib/copy.ts → copy.fr.hero.tagline
+hero: {
+  tagline: "Transforme ton inbox en 1 priorité claire par jour.",
+  ...
+}</code></pre>
+
+  <h3>Modifier les tarifs</h3>
+<pre><code>// lib/copy.ts → copy.fr.pricing.plans
+plans: [
+  {
+    key: "lever",
+    name: "Lever",
+    monthlyPrice: 18,   // ← change ici
+    annualPrice: 15,    // ← et ici
+    ...
+  },
+  ...
+]</code></pre>
+
+  <h3>Ajouter une FAQ</h3>
+<pre><code>// lib/copy.ts → copy.fr.faq.items
+items: [
+  { q: "...", a: "..." },
+  { q: "Nouvelle question ?", a: "Réponse." },  // ← ajouter
+]</code></pre>
+
+  <h2>Règles de ton</h2>
+  <ul>
+    <li><strong>FR primaire</strong>, tutoyer.</li>
+    <li><strong>Phrases courtes</strong>, directes. Pas de "révolutionnaire", "magique", "10x", "découvrez".</li>
+    <li><strong>Minuscules pour les unités</strong> ("10 min/jour", "−30 % de backlog").</li>
+    <li><strong>Pas d'emoji</strong> dans les composants — uniquement des icônes lucide.</li>
+  </ul>
+</section>
+
+<!-- ============================================================== -->
+<!-- 06 — MODIFIER LES VISUELS                                      -->
+<!-- ============================================================== -->
+<section class="section">
+  <span class="section-eyebrow">06 · Modifier les visuels</span>
+  <h1 class="section-title">Couleurs, typographie, espacements.</h1>
+  <p class="section-lead">
+    Le système de design est centralisé dans <code>tailwind.config.ts</code>.
+    Modifier un token ici met à jour l'ensemble du site. Voir la page
+    <code>/styleguide</code> pour visualiser chaque token.
+  </p>
+
+  <h2>Palette de couleurs</h2>
+  <p>Sept échelles, calquées sur la design system de Superhuman :</p>
+  <table>
+    <tbody>
+      <tr><td><strong>neutral</strong></td><td>Fond, type, bordures. <code>neutral-90</code> = encre, <code>neutral-5</code> = surface claire.</td></tr>
+      <tr><td><strong>purple</strong></td><td>Accent de marque. <code>purple-60</code> = couleur d'action principale (CTA, focus).</td></tr>
+      <tr><td><strong>mulberry</strong></td><td>Tons sombres profonds (footer, wordmark fantôme).</td></tr>
+      <tr><td><strong>green</strong></td><td>Indicateurs positifs (scores, "traité"). <code>green-60</code> = signal.</td></tr>
+      <tr><td><strong>red / blue / sky / orange</strong></td><td>Échelles secondaires pour erreurs, highlights, etc.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Typographie</h2>
+  <p>Toutes les tailles à partir de <code>h6</code> utilisent
+  <code>clamp()</code> pour scaler fluidiquement entre mobile et
+  desktop. Les valeurs sont définies dans <code>tailwind.config.ts</code>
+  sous <code>fontSize</code>.</p>
+
+  <h2>Remplacer la vidéo du hero</h2>
+  <p>La vidéo de fond du hero est dans <code>public/hero-bg.mp4</code>.
+  Pour la remplacer :</p>
+  <ol>
+    <li>Optimiser le fichier (H.264, 1080p max, &lt; 3MB idéalement).</li>
+    <li>Le déposer dans <code>public/</code> sous le même nom.</li>
+    <li>Optionnel : ajouter <code>hero-bg.webm</code> (version VP9) et <code>hero-bg.jpg</code> (poster).</li>
+  </ol>
+
+  <h2>Changer une image Pexels</h2>
+  <p>Les IDs Pexels utilisés sont listés dans <code>lib/images.ts</code>.
+  Trouver une nouvelle photo sur <a href="https://pexels.com">pexels.com</a>,
+  noter l'ID dans l'URL, et le remplacer dans la définition.</p>
+
+  <div class="warn">
+    <span class="label">Attention</span>
+    Les chemins <code>/asset</code> manuels (vidéo, poster, logos)
+    doivent passer par <code>asset("/chemin")</code> pour fonctionner
+    en production. <code>next/image</code> et <code>next/link</code>
+    gèrent ça automatiquement.
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<!-- 07 — DÉPLOIEMENT                                               -->
+<!-- ============================================================== -->
+<section class="section">
+  <span class="section-eyebrow">07 · Déploiement</span>
+  <h1 class="section-title">Publier une nouvelle version.</h1>
+  <p class="section-lead">
+    Le site est hébergé sur <strong>Cloudflare Pages</strong>. Le
+    déploiement se fait <strong>manuellement</strong> depuis ta machine
+    avec l'outil en ligne de commande <code>wrangler</code>. Un
+    <code>git push</code> seul ne suffit pas — il faut explicitement
+    déclencher la publication.
+  </p>
+
+  <div class="note">
+    <span class="label">Pourquoi ?</span>
+    Ce choix garde le déploiement sous contrôle humain. Pas de surprise,
+    pas de build qui part en production sans qu'on l'ait validé. En
+    contrepartie, il y a une étape de plus à exécuter après chaque
+    changement.
+  </div>
+
+  <h2>Pré-requis — une seule fois par personne</h2>
+
+  <h3>1. Token API Cloudflare</h3>
+  <p>Chaque personne qui déploie a besoin de son propre token. Pour
+  en créer un :</p>
+  <ol>
+    <li>Ouvrir <a href="https://dash.cloudflare.com/profile/api-tokens">dash.cloudflare.com/profile/api-tokens</a>.</li>
+    <li>Cliquer <strong>Create Token</strong> → en bas, <strong>Custom token → Get started</strong>.</li>
+    <li>Nommer le token, par exemple <code>virtus-lever-deploy-prenom</code>.</li>
+    <li>Sous <strong>Permissions</strong>, ajouter une ligne :<br/>
+      <em>Account</em> → <em>Cloudflare Pages</em> → <em>Edit</em>.</li>
+    <li>Sous <strong>Account Resources</strong> : <em>Include</em> → ton compte.</li>
+    <li>Optionnel : définir une date d'expiration.</li>
+    <li>Valider → copier le token affiché (visible une seule fois).</li>
+  </ol>
+
+  <h3>2. Stocker le token localement</h3>
+  <p>Le plus simple : créer un fichier <code>.env.local</code> à la racine
+  du projet (déjà dans le <code>.gitignore</code>, donc jamais commité) :</p>
+<pre><code># .env.local
+CLOUDFLARE_API_TOKEN="ton_token_ici"
+CLOUDFLARE_ACCOUNT_ID="2e6317da2d1dfc46378b391151b150ce"</code></pre>
+  <p>Puis charger ces variables avant de déployer :</p>
+<pre><code>export $(cat .env.local | xargs)</code></pre>
+
+  <div class="warn">
+    <span class="label">Sécurité</span>
+    Ne jamais commiter le token dans Git. Ne jamais le coller dans une
+    issue GitHub ou un message Slack. En cas de fuite, le révoquer
+    immédiatement depuis le dashboard API Tokens et en créer un nouveau.
+  </div>
+
+  <h2>Procédure de déploiement</h2>
+
+  <ol class="steps">
+    <li>
+      <h3>Créer une branche pour ton changement</h3>
+<pre><code>git checkout -b feat/nouveau-titre-hero</code></pre>
+    </li>
+    <li>
+      <h3>Faire ta modification et tester en local</h3>
+<pre><code>npm run dev
+# vérifier le résultat sur http://localhost:3000</code></pre>
+    </li>
+    <li>
+      <h3>Vérifier que le code compile</h3>
+<pre><code>npm run typecheck
+npm run build</code></pre>
+      <p>Si l'un des deux échoue, corrige avant de continuer — le
+      déploiement échouera aussi.</p>
+    </li>
+    <li>
+      <h3>Committer et pousser sur GitHub</h3>
+<pre><code>git add .
+git commit -m "feat: nouveau titre du hero"
+git push origin feat/nouveau-titre-hero</code></pre>
+      <p>Ouvrir une Pull Request, faire relire, merger sur
+      <code>main</code> quand tout est validé.</p>
+    </li>
+    <li>
+      <h3>Récupérer la dernière version de <code>main</code></h3>
+<pre><code>git checkout main
+git pull origin main</code></pre>
+    </li>
+    <li>
+      <h3>Construire le site</h3>
+<pre><code>npm run build</code></pre>
+      <p>La sortie est générée dans <code>out/</code>.</p>
+    </li>
+    <li>
+      <h3>Déployer sur Cloudflare Pages</h3>
+<pre><code># Si tes variables sont déjà chargées via .env.local
+npx wrangler pages deploy out \
+  --project-name=virtus-lever \
+  --branch=main
+
+# Sinon, les passer en ligne :
+CLOUDFLARE_API_TOKEN="ton_token" \
+CLOUDFLARE_ACCOUNT_ID="2e6317da2d1dfc46378b391151b150ce" \
+npx wrangler pages deploy out \
+  --project-name=virtus-lever \
+  --branch=main</code></pre>
+      <p>La commande affiche une URL <code>*.pages.dev</code> de preview
+      en fin d'exécution. Le déploiement est terminé en ~30 secondes.</p>
+    </li>
+    <li>
+      <h3>Vérifier en production</h3>
+      <p>Ouvrir <a href="https://virtuslever.com">virtuslever.com</a>
+      et contrôler ton changement. Si quelque chose cloche, voir la
+      section dépannage.</p>
+    </li>
+  </ol>
+
+  <h2>Déploiement de test (preview)</h2>
+  <p>Pour publier sur une URL temporaire sans toucher à la production,
+  utiliser une branche autre que <code>main</code> :</p>
+<pre><code>npx wrangler pages deploy out \
+  --project-name=virtus-lever \
+  --branch=preview-mon-changement</code></pre>
+  <p>La sortie inclut une URL <code>preview-mon-changement.virtus-lever.pages.dev</code>.
+  Attention : ces URLs sont redirigées vers <code>virtuslever.com</code>
+  par défaut (cf. section 03). Pour les rendre accessibles, désactiver
+  temporairement le redirect dans <code>functions/_middleware.js</code>.</p>
+
+  <div class="tip">
+    <span class="label">Raccourci</span>
+    Pour gagner du temps, créer un alias dans ton shell :
+<pre><code>alias lever-deploy='npm run build &amp;&amp; npx wrangler pages deploy out --project-name=virtus-lever --branch=main'</code></pre>
+    Une fois <code>.env.local</code> chargé, taper <code>lever-deploy</code>
+    suffit.
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<!-- 08 — VÉRIFICATIONS                                             -->
+<!-- ============================================================== -->
+<section class="section">
+  <span class="section-eyebrow">08 · Avant de pousser</span>
+  <h1 class="section-title">La checklist.</h1>
+  <p class="section-lead">
+    Trois minutes de vérification évitent un site cassé en production.
+    À faire systématiquement avant chaque PR.
+  </p>
+
+  <h2>Code</h2>
+  <ul>
+    <li><strong><code>npm run typecheck</code></strong> — aucun message d'erreur.</li>
+    <li><strong><code>npm run build</code></strong> — termine avec le rapport "Static / prerendered as static content".</li>
+    <li><strong><code>npm run lint</code></strong> — pas d'erreur (les <em>warnings</em> peuvent passer si justifiés).</li>
+  </ul>
+
+  <h2>Visuel</h2>
+  <ul>
+    <li>Tester sur mobile (responsive). Le site est conçu pour rester lisible jusqu'à 360 px de large.</li>
+    <li>Vérifier que la nouvelle section ne casse pas la séquence des sections claires/sombres.</li>
+    <li>Si tu as ajouté une image, vérifier qu'elle charge en production (et pas seulement en local).</li>
+  </ul>
+
+  <h2>Copie</h2>
+  <ul>
+    <li>Relire en français — tutoyer, phrases courtes, pas de fautes.</li>
+    <li>Si tu as utilisé une marque ou un nom propre (ex. Gmail, Apple), vérifier que c'est justifié et pas une promesse marketing fausse.</li>
+    <li>Ajouter aussi la version anglaise dans <code>copy.en</code> quand c'est possible (pour la future i18n).</li>
+  </ul>
+</section>
+
+<!-- ============================================================== -->
+<!-- 09 — DÉPANNAGE                                                 -->
+<!-- ============================================================== -->
+<section class="section">
+  <span class="section-eyebrow">09 · Dépannage</span>
+  <h1 class="section-title">Quand ça coince.</h1>
+  <p class="section-lead">
+    Les problèmes les plus fréquents et leur solution.
+  </p>
+
+  <h2>Le build échoue avec une erreur TypeScript</h2>
+  <p>Lancer <code>npm run typecheck</code> en local pour voir le détail.
+  Souvent : un import manquant, un type qui n'existe pas dans
+  <code>copy.ts</code>, ou un composant qui a changé de signature.</p>
+
+  <h2>L'image apparaît en local mais pas en production</h2>
+  <p>Le chemin n'utilise pas <code>asset()</code>. Tout chemin vers
+  <code>/public/</code> dans un <code>&lt;img&gt;</code>,
+  <code>&lt;source&gt;</code> ou <code>style={{ backgroundImage }}</code>
+  doit passer par le helper :</p>
+<pre><code>import { asset } from "@/lib/asset";
+
+&lt;img src={asset("/mon-image.png")} alt="..." /&gt;</code></pre>
+
+  <h2>Le site sur <code>virtus-lever.pages.dev</code> redirige</h2>
+  <p>C'est voulu. La fonction <code>functions/_middleware.js</code>
+  renvoie un 301 vers <code>virtuslever.com</code> pour éviter le
+  contenu dupliqué côté SEO. Pour tester un preview deploy, regarder
+  les liens fournis dans la PR sur GitHub.</p>
+
+  <h2><code>wrangler pages deploy</code> renvoie une erreur d'authentification</h2>
+  <p>Le token ou l'account ID sont absents ou incorrects. Vérifier :</p>
+  <ul>
+    <li>Que <code>.env.local</code> est bien chargé : <code>echo $CLOUDFLARE_API_TOKEN</code> doit renvoyer le token.</li>
+    <li>Que le token n'a pas expiré (dashboard → API Tokens).</li>
+    <li>Que la permission est bien <em>Account · Cloudflare Pages · Edit</em>.</li>
+  </ul>
+
+  <h2>La nouvelle version n'apparaît pas sur virtuslever.com</h2>
+  <p>Trois causes possibles, à vérifier dans l'ordre :</p>
+  <ol>
+    <li><strong>Le déploiement n'a pas tourné.</strong> Un <code>git push</code> seul ne déclenche rien. Il faut explicitement lancer <code>npx wrangler pages deploy out</code>.</li>
+    <li><strong>Le build d'avant a été poussé.</strong> Refaire <code>npm run build</code> avant de redéployer.</li>
+    <li><strong>Cache navigateur.</strong> Ouvrir la page en navigation privée, ou hard-refresh (<code>Cmd+Shift+R</code>). Cloudflare cache aussi côté edge — attendre ~1 min ou purger le cache dans le dashboard.</li>
+  </ol>
+
+  <h2>Suivre l'état des déploiements</h2>
+  <p>Dashboard Cloudflare → <em>Workers &amp; Pages</em> →
+  <em>virtus-lever</em> → onglet <em>Deployments</em>. Chaque
+  <code>wrangler pages deploy</code> y apparaît avec son URL de
+  preview, son timestamp et le statut (succès / échec).</p>
+
+  <h2>Une animation bug sur certains navigateurs</h2>
+  <p>framer-motion + SVG : ne pas se reposer sur
+  <code>transform-origin</code> + <code>transform-box: view-box</code>
+  pour les rotations avec un point d'ancrage fixe (clock hands, dials).
+  Animer directement les coordonnées via <code>useTransform</code>
+  d'un <code>useMotionValue</code> (voir
+  <code>components/illustrations/pillars.tsx</code> →
+  <code>FollowupsIllustration</code> pour l'exemple).</p>
+
+  <div class="footer-note">
+    <strong>Besoin d'aide ?</strong> Pour toute question sur la stack
+    ou une décision de design, ouvrir une issue sur le dépôt GitHub ou
+    contacter Cal directement. Le fichier <code>CLAUDE.md</code>
+    (s'il existe) contient les règles de design system détaillées.
+  </div>
+</section>
+
+</body>
+</html>
