@@ -47,7 +47,7 @@ export function Footer() {
                 />
               </Button>
               <Link
-                href="#"
+                href="/contact"
                 className="text-small text-white/70 hover:text-white underline-offset-4 hover:underline transition-colors duration-200 ease-soft sm:self-center"
               >
                 Parler à l'équipe →
@@ -64,12 +64,12 @@ export function Footer() {
                 </h4>
                 <ul className="space-y-3">
                   {col.links.map((link) => (
-                    <li key={link}>
+                    <li key={link.label}>
                       <Link
-                        href="#"
+                        href={link.href}
                         className="text-body text-white/70 hover:text-white transition-colors duration-200 ease-soft"
                       >
-                        {link}
+                        {link.label}
                       </Link>
                     </li>
                   ))}

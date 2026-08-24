@@ -383,9 +383,23 @@ export const copy = {
     footer: {
       tagline: "Le levier d'Archimède, version inbox.",
       columns: [
-        { heading: "Produit", links: ["Fonctionnalités", "Tarifs", "Changelog", "Sécurité"] },
-        { heading: "Société", links: ["Manifeste", "À propos", "Contact"] },
-        { heading: "Légal",   links: ["Confidentialité", "CGU", "DPA", "Sous-traitants"] },
+        { heading: "Produit", links: [
+          { label: "Fonctionnalités", href: "/#product" },
+          { label: "Tarifs",          href: "/#pricing" },
+          { label: "Changelog",       href: "/changelog" },
+          { label: "Sécurité",        href: "/#security" },
+        ] },
+        { heading: "Société", links: [
+          { label: "Manifeste", href: "/#manifesto" },
+          { label: "À propos",  href: "/a-propos" },
+          { label: "Contact",   href: "/contact" },
+        ] },
+        { heading: "Légal", links: [
+          { label: "Confidentialité", href: "/confidentialite" },
+          { label: "CGU",             href: "/cgu" },
+          { label: "DPA",             href: "/dpa" },
+          { label: "Sous-traitants",  href: "/sous-traitants" },
+        ] },
       ],
       copyright: "© 2026 Virtus Lever — Made in France.",
     },
@@ -481,9 +495,23 @@ export const copy = {
     footer: {
       tagline: "Archimedes' lever, inbox edition.",
       columns: [
-        { heading: "Product", links: ["Features", "Pricing", "Changelog", "Security"] },
-        { heading: "Company", links: ["Manifesto", "About", "Contact"] },
-        { heading: "Legal",   links: ["Privacy", "Terms", "DPA", "Subprocessors"] },
+        { heading: "Product", links: [
+          { label: "Features",  href: "/#product" },
+          { label: "Pricing",   href: "/#pricing" },
+          { label: "Changelog", href: "/changelog" },
+          { label: "Security",  href: "/#security" },
+        ] },
+        { heading: "Company", links: [
+          { label: "Manifesto", href: "/#manifesto" },
+          { label: "About",     href: "/a-propos" },
+          { label: "Contact",   href: "/contact" },
+        ] },
+        { heading: "Legal", links: [
+          { label: "Privacy",       href: "/confidentialite" },
+          { label: "Terms",         href: "/cgu" },
+          { label: "DPA",           href: "/dpa" },
+          { label: "Subprocessors", href: "/sous-traitants" },
+        ] },
       ],
       copyright: "© 2026 Virtus Lever — built in Paris, quietly.",
     },

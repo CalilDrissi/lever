@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
  * page. Once the user scrolls past 8px, we switch to the solid mode so
  * the chrome doesn't sit transparent over white sections later.
  */
-export function Nav() {
+export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
   const t = copy.fr.nav;
   const brand = copy.fr.brand;
 
@@ -47,8 +47,10 @@ export function Nav() {
   }, [open]);
 
   // Inverted = floating over the navy hero. Opening the drawer always
-  // forces the solid mode so the drawer reads cleanly.
-  const inverted = !scrolled && !open;
+  // forces the solid mode so the drawer reads cleanly. Interior pages
+  // (no dark hero behind the pill) pass forceSolid so the pill never
+  // renders white-on-white at the top of the page.
+  const inverted = !forceSolid && !scrolled && !open;
 
   return (
     <header className="fixed top-3 sm:top-4 inset-x-0 z-40 px-3 sm:px-6 pointer-events-none">
@@ -91,16 +93,16 @@ export function Nav() {
 
           {/* Nav links — visible from lg up */}
           <nav className="hidden lg:flex items-center gap-6">
-            <NavLink href="#product" inverted={inverted}>
+            <NavLink href="/#product" inverted={inverted}>
               {t.product}
             </NavLink>
-            <NavLink href="#pricing" inverted={inverted}>
+            <NavLink href="/#pricing" inverted={inverted}>
               {t.pricing}
             </NavLink>
-            <NavLink href="#manifesto" inverted={inverted}>
+            <NavLink href="/#manifesto" inverted={inverted}>
               {t.manifesto}
             </NavLink>
-            <NavLink href="#security" inverted={inverted}>
+            <NavLink href="/#security" inverted={inverted}>
               {t.security}
             </NavLink>
           </nav>
@@ -161,16 +163,16 @@ export function Nav() {
         >
           <div className="rounded-xl bg-white border border-neutral-20 shadow-card overflow-hidden">
             <nav className="px-5 py-4 flex flex-col">
-              <DrawerLink href="#product" onSelect={() => setOpen(false)}>
+              <DrawerLink href="/#product" onSelect={() => setOpen(false)}>
                 {t.product}
               </DrawerLink>
-              <DrawerLink href="#pricing" onSelect={() => setOpen(false)}>
+              <DrawerLink href="/#pricing" onSelect={() => setOpen(false)}>
                 {t.pricing}
               </DrawerLink>
-              <DrawerLink href="#manifesto" onSelect={() => setOpen(false)}>
+              <DrawerLink href="/#manifesto" onSelect={() => setOpen(false)}>
                 {t.manifesto}
               </DrawerLink>
-              <DrawerLink href="#security" onSelect={() => setOpen(false)}>
+              <DrawerLink href="/#security" onSelect={() => setOpen(false)}>
                 {t.security}
               </DrawerLink>
               <div className="mt-4 pt-4 border-t border-neutral-20 flex items-center gap-3">

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import * as React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,16 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Input, Label } from "@/components/ui/input";
 import { InboxMockup } from "@/components/inbox-mockup";
+
+/**
+ * Internal-only page. Kept out of all public navigation and marked
+ * noindex,nofollow so it never surfaces in search results. Still reachable
+ * by direct URL for internal design reference. (For a hard lock, gate
+ * /styleguide behind Cloudflare Access.)
+ */
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 /**
  * /styleguide — visible reference for all tokens & components.
