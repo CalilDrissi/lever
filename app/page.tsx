@@ -10,6 +10,7 @@ import { Manifesto } from "@/components/sections/manifesto";
 import { Security } from "@/components/sections/security";
 import { Pricing } from "@/components/sections/pricing";
 import { FAQ } from "@/components/sections/faq";
+import { Resources } from "@/components/sections/resources";
 import { FinalCta } from "@/components/sections/final-cta";
 import { Newsletter } from "@/components/sections/newsletter";
 import { Footer } from "@/components/sections/footer";
@@ -31,6 +32,7 @@ export default function HomePage() {
         <Pricing />
         <FAQ />
         <FinalCta />
+        <Resources />
         <Newsletter />
       </main>
       <Footer />

@@ -356,6 +356,31 @@ export const copy = {
         },
       ],
     },
+    resources: {
+      eyebrow: "Ressources",
+      title: "La productivité, en clair.",
+      sub: "Trois méthodes qui inspirent Lever — expliquées en quelques minutes.",
+      videos: [
+        {
+          id: "ZxWjNJSXpi4",
+          topic: "Prioriser",
+          title: "La matrice d'Eisenhower",
+          blurb: "Urgent ou important ? Trie tes tâches selon les deux axes qui comptent.",
+        },
+        {
+          id: "gvLiTG3Webg",
+          topic: "Concentrer l'effort",
+          title: "La loi de Pareto (80/20)",
+          blurb: "20 % de tes actions produisent 80 % des résultats. Le cœur du levier.",
+        },
+        {
+          id: "zsf0nDtH0UU",
+          topic: "Une seule chose",
+          title: "The One Thing",
+          blurb: "La tâche domino : celle qui, une fois faite, simplifie tout le reste.",
+        },
+      ],
+    },
     finalCta: {
       eyebrow: "Essai gratuit · 14 jours",
       title: "Une priorité par jour. Pendant deux semaines. Gratuit.",
