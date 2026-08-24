@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Linkedin, Twitter, Github, Mail, ArrowRight } from "lucide-react";
 import { copy } from "@/lib/copy";
+import { AUTH_LINKS } from "@/lib/links";
 import { FranceFlag } from "@/components/icons/france-flag";
 import { Button } from "@/components/ui/button";
 
@@ -37,15 +38,17 @@ export function Footer() {
               Une priorité par jour. Pendant deux semaines. Gratuit.
             </h3>
             <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
-              <Button variant="primary" size="lg" className="group">
-                Commencer
-                <ArrowRight
-                  size={18}
-                  strokeWidth={2}
-                  className="transition-transform duration-300 ease-soft group-hover:translate-x-0.5"
-                  aria-hidden="true"
-                />
-              </Button>
+              <a href={AUTH_LINKS.signup}>
+                <Button variant="primary" size="lg" className="group">
+                  Commencer
+                  <ArrowRight
+                    size={18}
+                    strokeWidth={2}
+                    className="transition-transform duration-300 ease-soft group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </Button>
+              </a>
               <Link
                 href="/contact"
                 className="text-small text-white/70 hover:text-white underline-offset-4 hover:underline transition-colors duration-200 ease-soft sm:self-center"

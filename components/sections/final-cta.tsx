@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   motion,
   useScroll,
@@ -12,6 +13,7 @@ import {
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { copy } from "@/lib/copy";
+import { AUTH_LINKS } from "@/lib/links";
 import { images, px } from "@/lib/images";
 
 /**
@@ -112,22 +114,26 @@ export function FinalCta() {
               {/* On the dark band, the brand-purple primary keeps its
                   identity and the secondary flips to white-on-transparent
                   so it reads against the charcoal background. */}
-              <Button variant="primary" size="lg" className="group">
-                {t.cta}
-                <ArrowRight
-                  size={18}
-                  strokeWidth={2}
-                  className="transition-transform duration-300 ease-soft group-hover:translate-x-0.5"
-                  aria-hidden="true"
-                />
-              </Button>
-              <Button
-                variant="secondary"
-                size="lg"
-                className="bg-transparent text-white border-white hover:bg-white hover:text-neutral-90"
-              >
-                {t.ctaSecondary}
-              </Button>
+              <a href={AUTH_LINKS.signup}>
+                <Button variant="primary" size="lg" className="group w-full sm:w-auto">
+                  {t.cta}
+                  <ArrowRight
+                    size={18}
+                    strokeWidth={2}
+                    className="transition-transform duration-300 ease-soft group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </Button>
+              </a>
+              <Link href="/contact">
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="w-full sm:w-auto bg-transparent text-white border-white hover:bg-white hover:text-neutral-90"
+                >
+                  {t.ctaSecondary}
+                </Button>
+              </Link>
             </div>
 
             <p className="mt-5 text-small text-white/55">{microproof}</p>

@@ -4,6 +4,7 @@ import { PageShell, PageHeader, Section } from "@/components/page-shell";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { AUTH_LINKS } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "À propos — Virtus Lever",
@@ -54,9 +55,11 @@ export default function AProposPage() {
         lead="Virtus Lever transforme ta boîte de réception en une décision claire par jour. Le reste attend — et ce n'est pas grave."
       >
         <div className="flex flex-wrap gap-3">
-          <Button variant="primary" size="md" className="rounded">
-            Essayer Lever
-          </Button>
+          <a href={AUTH_LINKS.signup}>
+            <Button variant="primary" size="md" className="rounded">
+              Essayer Lever
+            </Button>
+          </a>
           <Link href="/contact">
             <Button variant="secondary" size="md" className="rounded">
               Parler à l'équipe
@@ -149,9 +152,11 @@ export default function AProposPage() {
               t'enfermer.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button variant="primary" size="md" className="rounded">
-                Commencer — 14 jours offerts
-              </Button>
+              <a href={AUTH_LINKS.signup}>
+                <Button variant="primary" size="md" className="rounded">
+                  Commencer — 14 jours offerts
+                </Button>
+              </a>
               <Link href="/contact">
                 <Button
                   variant="secondary"

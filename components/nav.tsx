@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { copy } from "@/lib/copy";
+import { AUTH_LINKS } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 /**
@@ -109,8 +110,8 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
 
           {/* CTA cluster — only at lg+ */}
           <div className="ml-auto hidden lg:flex items-center gap-1.5">
-            <Link
-              href="#"
+            <a
+              href={AUTH_LINKS.login}
               className={cn(
                 "h-9 px-3 inline-flex items-center text-small font-medium rounded-full",
                 "transition-colors duration-200 ease-soft",
@@ -120,14 +121,16 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
               )}
             >
               {t.login}
-            </Link>
-            <Button
-              variant="primary"
-              size="sm"
-              className="rounded-full px-4"
-            >
-              {t.cta}
-            </Button>
+            </a>
+            <a href={AUTH_LINKS.signup}>
+              <Button
+                variant="primary"
+                size="sm"
+                className="rounded-full px-4"
+              >
+                {t.cta}
+              </Button>
+            </a>
           </div>
 
           {/* Mobile / tablet menu button — covers everything < lg */}
@@ -176,19 +179,26 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
                 {t.security}
               </DrawerLink>
               <div className="mt-4 pt-4 border-t border-neutral-20 flex items-center gap-3">
-                <Link
-                  href="#"
+                <a
+                  href={AUTH_LINKS.login}
+                  onClick={() => setOpen(false)}
                   className="h-10 px-4 inline-flex items-center text-body font-medium text-neutral-80 hover:text-neutral-90"
                 >
                   {t.login}
-                </Link>
-                <Button
-                  variant="primary"
-                  size="md"
-                  className="ml-auto rounded-full px-5"
+                </a>
+                <a
+                  href={AUTH_LINKS.signup}
+                  onClick={() => setOpen(false)}
+                  className="ml-auto"
                 >
-                  {t.cta}
-                </Button>
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="rounded-full px-5"
+                  >
+                    {t.cta}
+                  </Button>
+                </a>
               </div>
             </nav>
           </div>

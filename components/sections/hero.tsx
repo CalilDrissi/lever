@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { HeroVideo } from "@/components/hero-video";
 import { HeroDecorations } from "@/components/hero-decorations";
 import { copy } from "@/lib/copy";
+import { AUTH_LINKS } from "@/lib/links";
 
 /**
  * Hero — exactly 100vh, centered single-column copy.
@@ -109,15 +110,17 @@ export function Hero() {
           }}
           className="mt-7 sm:mt-9 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 w-full sm:w-auto"
         >
-          <Button variant="primary" size="lg" className="group">
-            {t.ctaPrimary}
-            <ArrowRight
-              size={18}
-              strokeWidth={2}
-              className="transition-transform duration-300 ease-soft group-hover:translate-x-0.5"
-              aria-hidden="true"
-            />
-          </Button>
+          <a href={AUTH_LINKS.signup}>
+            <Button variant="primary" size="lg" className="group w-full sm:w-auto">
+              {t.ctaPrimary}
+              <ArrowRight
+                size={18}
+                strokeWidth={2}
+                className="transition-transform duration-300 ease-soft group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+            </Button>
+          </a>
           <Button
             variant="secondary"
             size="lg"
