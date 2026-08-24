@@ -1,0 +1,50 @@
+name: Deploy to Cloudflare Pages
+
+# Triggers:
+#   - any push to main rebuilds and redeploys production
+#   - manual run via the Actions tab
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Don't run multiple deploys at once; a newer commit cancels an in-flight run.
+concurrency:
+  group: cloudflare-pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        # sharp's native build is skipped: the static export uses
+        # images.unoptimized, so sharp is never invoked.
+        run: npm ci --ignore-scripts
+
+      - name: Build static export
+        # No GITHUB_PAGES flag → basePath stays empty, correct for the
+        # virtuslever.com custom domain. Next writes the site to ./out.
+        run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # `pages deploy ./out` uploads the static assets; wrangler also
+          # auto-bundles the ./functions directory (the canonical-host
+          # redirect middleware) into the deployment.
+          command: pages deploy ./out --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=main
