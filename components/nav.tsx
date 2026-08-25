@@ -31,11 +31,23 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
   const brand = copy.fr.brand;
 
   const [scrolled, setScrolled] = React.useState(false);
+  const [hidden, setHidden] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const lastY = React.useRef(0);
 
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    // Smart-sticky: reveal near the top and when scrolling up; hide when
+    // scrolling down past a small threshold.
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      if (y < 96) setHidden(false);
+      else if (y > lastY.current + 4) setHidden(true);
+      else if (y < lastY.current - 4) setHidden(false);
+      lastY.current = y;
+    };
     onScroll();
+    lastY.current = window.scrollY;
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -52,9 +64,17 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
   // (no dark hero behind the pill) pass forceSolid so the pill never
   // renders white-on-white at the top of the page.
   const inverted = !forceSolid && !scrolled && !open;
+  // Never hide while the mobile drawer is open.
+  const isHidden = hidden && !open;
 
   return (
-    <header className="fixed top-3 sm:top-4 inset-x-0 z-40 px-3 sm:px-6 pointer-events-none">
+    <header
+      className={cn(
+        "fixed top-3 sm:top-4 inset-x-0 z-40 px-3 sm:px-6 pointer-events-none",
+        "transition-transform duration-300 ease-soft",
+        isHidden ? "-translate-y-[150%]" : "translate-y-0"
+      )}
+    >
       <div className="mx-auto max-w-[1180px]">
         <div
           className={cn(

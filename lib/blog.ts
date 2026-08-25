@@ -164,6 +164,51 @@ export async function getRelatedArticles(slugs: string[]): Promise<Article[]> {
     .filter((a): a is Article => Boolean(a));
 }
 
+/**
+ * Related posts for an article — always returns `limit` of them:
+ *   1. any explicit `related` slugs (seed posts), then
+ *   2. posts sharing the most tags, then
+ *   3. most-recent others as a fallback.
+ * Works for Contentful posts (which carry tags but no explicit related list).
+ */
+export async function getRelatedForArticle(
+  article: Article,
+  limit = 3
+): Promise<Article[]> {
+  const all = await getAllArticles();
+  const others = all.filter((a) => a.slug !== article.slug);
+
+  const result: Article[] = [];
+  const taken = new Set<string>();
+  const add = (a: Article) => {
+    if (!taken.has(a.slug) && result.length < limit) {
+      taken.add(a.slug);
+      result.push(a);
+    }
+  };
+
+  // 1. Explicit related (seed posts)
+  (article.related || []).forEach((slug) => {
+    const a = others.find((o) => o.slug === slug);
+    if (a) add(a);
+  });
+
+  // 2. Most shared tags, tie-broken by recency
+  others
+    .map((a) => ({
+      a,
+      score: a.tags.filter((t) => article.tags.includes(t)).length,
+    }))
+    .sort(
+      (x, y) =>
+        y.score - x.score ||
+        (y.a.publishedDate || "").localeCompare(x.a.publishedDate || "")
+    )
+    .forEach(({ a }) => add(a));
+
+  return result.slice(0, limit);
+}
+
 function collectText(node: any): string {
   if (!node) return "";
   if (node.nodeType === "text") return node.value || "";

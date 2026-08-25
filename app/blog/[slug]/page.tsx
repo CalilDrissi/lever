@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   getAllArticles,
   getArticleBySlug,
-  getRelatedArticles,
+  getRelatedForArticle,
   articleHeadings,
   articlePlainText,
   tagToSlug,
@@ -80,7 +80,7 @@ export default async function BlogPostPage({
   }
 
   const [related, headings] = await Promise.all([
-    post.related ? getRelatedArticles(post.related) : Promise.resolve([]),
+    getRelatedForArticle(post, 3),
     Promise.resolve(articleHeadings(post)),
   ]);
   const plainText = articlePlainText(post);
