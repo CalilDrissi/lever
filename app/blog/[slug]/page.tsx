@@ -145,8 +145,8 @@ export default async function BlogPostPage({
         ) : null}
 
         {/* Body — centered column, sticky TOC rail on wide screens */}
-        <div className="container py-12 sm:py-14">
-          <ArticleToc headings={headings} />
+        <div id="post-body" className="container py-12 sm:py-14">
+          <ArticleToc headings={headings} boundsId="post-body" />
           <div className={COLUMN}>
             <ArticleBody article={post} />
 

@@ -93,3 +93,12 @@ html, body {
   0%, 100% { transform: scaleY(0.55); }
   50% { transform: scaleY(1); }
 }
+
+/* Image loading shimmer — a highlight sweep across a skeleton placeholder. */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .img-shimmer { animation: none; }
+}
