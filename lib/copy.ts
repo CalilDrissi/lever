@@ -22,6 +22,7 @@ export const copy = {
       pricing: "Tarifs",
       manifesto: "Manifeste",
       security: "Sécurité",
+      blog: "Blog",
       login: "Se connecter",
       cta: "Essayer Lever",
     },
@@ -416,6 +417,7 @@ export const copy = {
         ] },
         { heading: "Société", links: [
           { label: "Manifeste", href: "/#manifesto" },
+          { label: "Blog",      href: "/blog" },
           { label: "À propos",  href: "/a-propos" },
           { label: "Contact",   href: "/contact" },
         ] },
@@ -437,6 +439,7 @@ export const copy = {
       pricing: "Pricing",
       manifesto: "Manifesto",
       security: "Security",
+      blog: "Blog",
       login: "Sign in",
       cta: "Try Lever",
     },
@@ -528,6 +531,7 @@ export const copy = {
         ] },
         { heading: "Company", links: [
           { label: "Manifesto", href: "/#manifesto" },
+          { label: "Blog",      href: "/blog" },
           { label: "About",     href: "/a-propos" },
           { label: "Contact",   href: "/contact" },
         ] },

@@ -106,6 +106,9 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
             <NavLink href="/#security" inverted={inverted}>
               {t.security}
             </NavLink>
+            <NavLink href="/blog" inverted={inverted}>
+              {t.blog}
+            </NavLink>
           </nav>
 
           {/* CTA cluster — only at lg+ */}
@@ -177,6 +180,9 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
               </DrawerLink>
               <DrawerLink href="/#security" onSelect={() => setOpen(false)}>
                 {t.security}
+              </DrawerLink>
+              <DrawerLink href="/blog" onSelect={() => setOpen(false)}>
+                {t.blog}
               </DrawerLink>
               <div className="mt-4 pt-4 border-t border-neutral-20 flex items-center gap-3">
                 <a

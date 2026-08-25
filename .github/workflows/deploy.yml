@@ -3,10 +3,14 @@ name: Deploy to Cloudflare Pages
 # Triggers:
 #   - any push to main rebuilds and redeploys production
 #   - manual run via the Actions tab
+#   - repository_dispatch (event type "contentful-publish") so a Contentful
+#     webhook can trigger a production rebuild when a post is published
 on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:
+    types: [contentful-publish]
 
 # Don't run multiple deploys at once; a newer commit cancels an in-flight run.
 concurrency:
@@ -37,6 +41,12 @@ jobs:
       - name: Build static export
         # No GITHUB_PAGES flag → basePath stays empty, correct for the
         # virtuslever.com custom domain. Next writes the site to ./out.
+        # Contentful (Delivery API, published only) is read at build time;
+        # no CONTENTFUL_PREVIEW here so production shows published posts.
+        env:
+          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          CONTENTFUL_ENVIRONMENT: master
+          CONTENTFUL_DELIVERY_TOKEN: ${{ secrets.CONTENTFUL_DELIVERY_TOKEN }}
         run: npm run build
 
       - name: Deploy to Cloudflare Pages

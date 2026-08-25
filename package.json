@@ -10,8 +10,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@contentful/rich-text-react-renderer": "^16.2.2",
+    "@contentful/rich-text-types": "^17.2.7",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
+    "contentful": "^11.12.9",
     "framer-motion": "11.5.4",
     "lucide-react": "0.441.0",
     "next": "14.2.15",
