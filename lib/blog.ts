@@ -163,3 +163,53 @@ export async function getRelatedArticles(slugs: string[]): Promise<Article[]> {
     .map((s) => all.find((a) => a.slug === s))
     .filter((a): a is Article => Boolean(a));
 }
+
+function collectText(node: any): string {
+  if (!node) return "";
+  if (node.nodeType === "text") return node.value || "";
+  return (node.content || []).map(collectText).join("");
+}
+
+/** Section headings of an article, with slug ids matching the rendered ones.
+ *  Used to build the table of contents. */
+export function articleHeadings(a: Article): { id: string; text: string }[] {
+  const raw: { id: string; text: string }[] = [];
+  if (a.sections) {
+    a.sections.forEach((s) => {
+      if (s.heading) raw.push({ id: tagToSlug(s.heading), text: s.heading });
+    });
+  } else if (a.richText) {
+    (a.richText.content || []).forEach((n: any) => {
+      if (n.nodeType === "heading-2" || n.nodeType === "heading-1") {
+        const t = collectText(n).trim();
+        if (t) raw.push({ id: tagToSlug(t), text: t });
+      }
+    });
+  }
+  return raw;
+}
+
+/** Full plain-text of an article (title + headings + body), inline markup
+ *  stripped — fed to the read-aloud (speech synthesis) player. */
+export function articlePlainText(a: Article): string {
+  if (a.sections) {
+    const parts = [a.title];
+    if (a.intro) parts.push(a.intro);
+    a.sections.forEach((s) => {
+      parts.push(s.heading);
+      s.body.forEach((b) =>
+        parts.push(b.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\*\*/g, ""))
+      );
+    });
+    return parts.join(". ");
+  }
+  if (a.richText) {
+    const parts: string[] = [a.title];
+    (a.richText.content || []).forEach((n: any) => {
+      const t = collectText(n).trim();
+      if (t) parts.push(t);
+    });
+    return parts.join(". ");
+  }
+  return a.excerpt;
+}

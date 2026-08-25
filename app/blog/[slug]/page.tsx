@@ -3,13 +3,17 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { PageShell, PageHeader, Section } from "@/components/page-shell";
 import { ArticleBody } from "@/components/blog/article-body";
-import { PostCard } from "@/components/blog/post-card";
-import { formatDate } from "@/components/blog/post-card";
+import { PostCard, formatDate } from "@/components/blog/post-card";
+import { ReadingProgress } from "@/components/blog/reading-progress";
+import { ArticleToc } from "@/components/blog/article-toc";
+import { ListenButton } from "@/components/blog/listen-button";
 import { Badge } from "@/components/ui/badge";
 import {
   getAllArticles,
   getArticleBySlug,
   getRelatedArticles,
+  articleHeadings,
+  articlePlainText,
   tagToSlug,
 } from "@/lib/blog";
 
@@ -44,6 +48,8 @@ export async function generateMetadata({
   };
 }
 
+const COLUMN = "mx-auto w-full max-w-[720px]";
+
 export default async function BlogPostPage({
   params,
 }: {
@@ -72,15 +78,20 @@ export default async function BlogPostPage({
     );
   }
 
-  const related = post.related ? await getRelatedArticles(post.related) : [];
+  const [related, headings] = await Promise.all([
+    post.related ? getRelatedArticles(post.related) : Promise.resolve([]),
+    Promise.resolve(articleHeadings(post)),
+  ]);
+  const plainText = articlePlainText(post);
 
   return (
     <PageShell>
-      <article>
-        {/* Header */}
+      <ReadingProgress targetId="post-article" />
+      <article id="post-article">
+        {/* Header — centered column */}
         <header className="border-b border-neutral-20 bg-neutral-5">
           <div className="container pt-32 pb-12 sm:pt-36">
-            <div className="measure">
+            <div className={COLUMN}>
               <Link
                 href="/blog"
                 className="inline-flex items-center gap-1.5 text-small font-medium text-neutral-80 hover:text-purple-60 transition-colors duration-200 ease-soft"
@@ -112,38 +123,45 @@ export default async function BlogPostPage({
                 <span aria-hidden="true">·</span>
                 <span>{post.readingMinutes} min de lecture</span>
               </div>
+
+              <div className="mt-6">
+                <ListenButton text={plainText} />
+              </div>
             </div>
           </div>
         </header>
 
-        {/* Cover */}
+        {/* Cover — centered, slightly wider than the text column */}
         {post.coverImageUrl ? (
           <div className="container pt-10">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={post.coverImageUrl}
-              alt={post.coverImageAlt}
-              className="w-full max-h-[520px] object-cover rounded-lg border border-neutral-20"
-            />
+            <div className="mx-auto w-full max-w-[860px]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={post.coverImageUrl}
+                alt={post.coverImageAlt}
+                className="w-full max-h-[520px] object-cover rounded-lg border border-neutral-20"
+              />
+            </div>
           </div>
         ) : null}
 
-        {/* Body */}
-        <Section className="pt-10">
-          <div className="measure">
+        {/* Body — centered column, sticky TOC rail on wide screens */}
+        <div className="container py-12 sm:py-14">
+          <ArticleToc headings={headings} />
+          <div className={COLUMN}>
             <ArticleBody article={post} />
-          </div>
 
-          <div className="measure mt-14 pt-6 border-t border-neutral-20">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-1.5 text-small font-medium text-neutral-80 hover:text-purple-60 transition-colors duration-200 ease-soft"
-            >
-              <ArrowLeft size={15} strokeWidth={2} aria-hidden="true" />
-              Retour au blog
-            </Link>
+            <div className="mt-14 pt-6 border-t border-neutral-20">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-1.5 text-small font-medium text-neutral-80 hover:text-purple-60 transition-colors duration-200 ease-soft"
+              >
+                <ArrowLeft size={15} strokeWidth={2} aria-hidden="true" />
+                Retour au blog
+              </Link>
+            </div>
           </div>
-        </Section>
+        </div>
 
         {/* Related */}
         {related.length > 0 ? (

@@ -9,6 +9,16 @@ import {
   MARKS,
   type Document,
 } from "@contentful/rich-text-types";
+import { tagToSlug } from "@/lib/contentful";
+
+/** Slug id for a heading node, matching lib/blog.articleHeadings (for TOC). */
+function headingId(node: any): string {
+  const text = (node?.content || [])
+    .map((c: any) => (c?.nodeType === "text" ? c.value || "" : ""))
+    .join("")
+    .trim();
+  return tagToSlug(text);
+}
 
 /**
  * RichText — renders a Contentful Rich Text document using the site's own
@@ -31,14 +41,14 @@ const options: Options = {
     [BLOCKS.PARAGRAPH]: (_node, children) => (
       <p className="text-body text-neutral-80 leading-relaxed my-5">{children}</p>
     ),
-    [BLOCKS.HEADING_1]: (_node, children) => (
-      <h2 className="font-display text-h3 tracking-tight text-neutral-90 mt-12 mb-4">{children}</h2>
+    [BLOCKS.HEADING_1]: (node, children) => (
+      <h2 id={headingId(node)} className="scroll-mt-24 font-display text-h3 tracking-tight text-neutral-90 mt-12 mb-4">{children}</h2>
     ),
-    [BLOCKS.HEADING_2]: (_node, children) => (
-      <h2 className="font-display text-h4 tracking-tight text-neutral-90 mt-12 mb-4">{children}</h2>
+    [BLOCKS.HEADING_2]: (node, children) => (
+      <h2 id={headingId(node)} className="scroll-mt-24 font-display text-h4 tracking-tight text-neutral-90 mt-12 mb-4">{children}</h2>
     ),
-    [BLOCKS.HEADING_3]: (_node, children) => (
-      <h3 className="font-display text-h5 tracking-tight text-neutral-90 mt-10 mb-3">{children}</h3>
+    [BLOCKS.HEADING_3]: (node, children) => (
+      <h3 id={headingId(node)} className="scroll-mt-24 font-display text-h5 tracking-tight text-neutral-90 mt-10 mb-3">{children}</h3>
     ),
     [BLOCKS.HEADING_4]: (_node, children) => (
       <h4 className="font-display text-h6 tracking-tight text-neutral-90 mt-8 mb-3">{children}</h4>

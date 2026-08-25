@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { RichText } from "./rich-text";
-import type { Article } from "@/lib/blog";
+import { tagToSlug, type Article } from "@/lib/blog";
 
 /**
  * Renders lightweight inline markup used in seed posts:
@@ -56,7 +56,10 @@ export function ArticleBody({ article }: { article: Article }) {
 
       {article.sections?.map((s, idx) => (
         <section key={idx} className="mt-12 first:mt-10">
-          <h2 className="font-display text-h4 tracking-tight text-neutral-90">
+          <h2
+            id={tagToSlug(s.heading)}
+            className="scroll-mt-24 font-display text-h4 tracking-tight text-neutral-90"
+          >
             {s.heading}
           </h2>
           {s.body.map((para, j) => (
