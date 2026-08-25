@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PageShell, PageHeader, Section } from "@/components/page-shell";
 import { PostCard } from "@/components/blog/post-card";
 import { Badge } from "@/components/ui/badge";
-import { getAllPosts, getAllTags, tagToSlug } from "@/lib/contentful";
+import { getAllArticles, getAllArticleTags, tagToSlug } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: "Blog — Virtus Lever",
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogIndexPage() {
-  const [posts, tags] = await Promise.all([getAllPosts(), getAllTags()]);
+  const [posts, tags] = await Promise.all([getAllArticles(), getAllArticleTags()]);
 
   return (
     <PageShell>

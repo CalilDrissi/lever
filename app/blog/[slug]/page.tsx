@@ -2,22 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { PageShell, PageHeader, Section } from "@/components/page-shell";
-import { RichText } from "@/components/blog/rich-text";
+import { ArticleBody } from "@/components/blog/article-body";
+import { PostCard } from "@/components/blog/post-card";
 import { formatDate } from "@/components/blog/post-card";
 import { Badge } from "@/components/ui/badge";
-import { getAllPosts, getPostBySlug, tagToSlug } from "@/lib/contentful";
+import {
+  getAllArticles,
+  getArticleBySlug,
+  getRelatedArticles,
+  tagToSlug,
+} from "@/lib/blog";
 
 // Export mode: only the slugs enumerated here are built; nothing on-demand.
 export const dynamicParams = false;
 
-// `output: export` rejects a dynamic route with zero params. Before any
-// posts exist we emit one placeholder slug so the site still builds; the
-// page renders a friendly "à venir" state for it. Once real posts exist the
-// placeholder disappears.
 const PLACEHOLDER_SLUG = "a-venir";
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts();
+  const posts = await getAllArticles();
   if (posts.length === 0) return [{ slug: PLACEHOLDER_SLUG }];
   return posts.map((p) => ({ slug: p.slug }));
 }
@@ -27,15 +29,15 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
+  const post = await getArticleBySlug(params.slug);
   if (!post) return { title: "Article — Virtus Lever" };
   return {
     title: `${post.title} — Virtus Lever`,
-    description: post.excerpt,
+    description: post.metaDescription || post.excerpt,
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       title: post.title,
-      description: post.excerpt,
+      description: post.metaDescription || post.excerpt,
       type: "article",
       images: post.coverImageUrl ? [{ url: post.coverImageUrl }] : undefined,
     },
@@ -47,10 +49,8 @@ export default async function BlogPostPage({
 }: {
   params: { slug: string };
 }) {
-  const post = await getPostBySlug(params.slug);
+  const post = await getArticleBySlug(params.slug);
 
-  // Only reachable for the placeholder slug (dynamicParams=false restricts
-  // routing to enumerated slugs, which all resolve to real posts).
   if (!post) {
     return (
       <PageShell>
@@ -72,10 +72,12 @@ export default async function BlogPostPage({
     );
   }
 
+  const related = post.related ? await getRelatedArticles(post.related) : [];
+
   return (
     <PageShell>
       <article>
-        {/* Article header */}
+        {/* Header */}
         <header className="border-b border-neutral-20 bg-neutral-5">
           <div className="container pt-32 pb-12 sm:pt-36">
             <div className="measure">
@@ -107,12 +109,14 @@ export default async function BlogPostPage({
                 {post.publishedDate ? (
                   <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>
                 ) : null}
+                <span aria-hidden="true">·</span>
+                <span>{post.readingMinutes} min de lecture</span>
               </div>
             </div>
           </div>
         </header>
 
-        {/* Cover image */}
+        {/* Cover */}
         {post.coverImageUrl ? (
           <div className="container pt-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -127,7 +131,7 @@ export default async function BlogPostPage({
         {/* Body */}
         <Section className="pt-10">
           <div className="measure">
-            <RichText document={post.body} />
+            <ArticleBody article={post} />
           </div>
 
           <div className="measure mt-14 pt-6 border-t border-neutral-20">
@@ -140,6 +144,22 @@ export default async function BlogPostPage({
             </Link>
           </div>
         </Section>
+
+        {/* Related */}
+        {related.length > 0 ? (
+          <section className="border-t border-neutral-20 bg-neutral-5">
+            <div className="container py-14 sm:py-16">
+              <h2 className="font-display text-h4 tracking-tight text-neutral-90 mb-8">
+                À lire ensuite
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {related.map((r) => (
+                  <PostCard key={r.slug} post={r} />
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
       </article>
     </PageShell>
   );

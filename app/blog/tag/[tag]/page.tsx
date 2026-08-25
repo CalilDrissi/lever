@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { PageShell, PageHeader, Section } from "@/components/page-shell";
 import { PostCard } from "@/components/blog/post-card";
-import { getAllTags, getPostsByTag, tagToSlug } from "@/lib/contentful";
+import { getAllArticleTags, getArticlesByTag, tagToSlug } from "@/lib/blog";
 
 // Export mode: only the tags enumerated here are built; nothing on-demand.
 export const dynamicParams = false;
@@ -13,14 +13,14 @@ export const dynamicParams = false;
 const PLACEHOLDER_TAG = "a-venir";
 
 export async function generateStaticParams() {
-  const tags = await getAllTags();
+  const tags = await getAllArticleTags();
   if (tags.length === 0) return [{ tag: PLACEHOLDER_TAG }];
   return tags.map((tag) => ({ tag: tagToSlug(tag) }));
 }
 
 /** Resolve a URL tag-slug back to its original (accented) tag label. */
 async function resolveTag(slug: string): Promise<string | null> {
-  const tags = await getAllTags();
+  const tags = await getAllArticleTags();
   return tags.find((t) => tagToSlug(t) === slug) ?? null;
 }
 
@@ -67,7 +67,7 @@ export default async function BlogTagPage({
     );
   }
 
-  const posts = await getPostsByTag(tag);
+  const posts = await getArticlesByTag(tag);
 
   return (
     <PageShell>

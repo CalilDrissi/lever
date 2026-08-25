@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import type { BlogPost } from "@/lib/contentful";
+import type { Article } from "@/lib/blog";
 
 /** Format an ISO date as e.g. "12 août 2026" (French). */
 export function formatDate(iso: string | null): string {
@@ -17,7 +17,7 @@ export function formatDate(iso: string | null): string {
   }
 }
 
-export function PostCard({ post }: { post: BlogPost }) {
+export function PostCard({ post }: { post: Article }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
