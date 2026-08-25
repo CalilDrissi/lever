@@ -4,23 +4,28 @@ import * as React from "react";
 import { Input, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { copy } from "@/lib/copy";
+import { cn } from "@/lib/utils";
 
 /**
- * ContactForm — styled contact form.
- *
- * TODO(contentful): wire submission to Contentful. Replace the mailto
- * fallback in `handleSubmit` with a POST to the Contentful-backed endpoint
- * (or a Cloudflare Pages Function that forwards to the Contentful
- * Management API). Until then, submitting composes a pre-filled email to
- * hello@<domain> via the visitor's mail client — no backend required, so
- * it works on the static export as-is.
+ * ContactForm — posts to the /api/contact Cloudflare Pages Function, which
+ * stores the submission as a `contactMessage` entry in Contentful. If the
+ * endpoint is unavailable (e.g. local `next dev`), it falls back to a
+ * pre-filled mailto so the form never dead-ends.
  */
 export function ContactForm() {
   const domain = copy.fr.brand.domain;
   const to = `hello@${domain}`;
-  const [sent, setSent] = React.useState(false);
+  const [status, setStatus] = React.useState<
+    "idle" | "submitting" | "sent" | "error"
+  >("idle");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function mailtoFallback(name: string, email: string, message: string) {
+    const subject = encodeURIComponent(`Contact — ${name || "Virtus Lever"}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name}\n${email}`);
+    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
@@ -28,12 +33,20 @@ export function ContactForm() {
     const email = String(data.get("email") ?? "");
     const message = String(data.get("message") ?? "");
 
-    const subject = encodeURIComponent(`Contact — ${name || "Virtus Lever"}`);
-    const body = encodeURIComponent(
-      `${message}\n\n— ${name}\n${email}`
-    );
-    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
-    setSent(true);
+    setStatus("submitting");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      if (!res.ok) throw new Error("bad status");
+      setStatus("sent");
+      form.reset();
+    } catch {
+      mailtoFallback(name, email, message);
+      setStatus("error");
+    }
   }
 
   return (
@@ -69,12 +82,26 @@ export function ContactForm() {
       </div>
 
       <div className="flex flex-wrap items-center gap-4">
-        <Button type="submit" variant="primary" size="md" className="rounded">
-          Envoyer
+        <Button
+          type="submit"
+          variant="primary"
+          size="md"
+          className="rounded"
+          disabled={status === "submitting"}
+        >
+          {status === "submitting" ? "Envoi…" : "Envoyer"}
         </Button>
-        <p className="text-small text-neutral-60">
-          {sent
-            ? "Ton client mail s'ouvre — vérifie qu'il a bien pré-rempli le message."
+        <p
+          className={cn(
+            "text-small",
+            status === "sent" ? "text-green-60" : "text-neutral-60"
+          )}
+          role="status"
+        >
+          {status === "sent"
+            ? "Merci ! Ton message est bien parti — on te répond vite."
+            : status === "error"
+            ? "Ton client mail s'ouvre en secours — envoie-nous le message directement."
             : "Réponse sous un jour ouvré."}
         </p>
       </div>
