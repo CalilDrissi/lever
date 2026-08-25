@@ -87,3 +87,9 @@ html, body {
     animation: none;
   }
 }
+
+/* Soundwave bar pulse — used by the article read-aloud player. */
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.55); }
+  50% { transform: scaleY(1); }
+}

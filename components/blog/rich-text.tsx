@@ -10,6 +10,7 @@ import {
   type Document,
 } from "@contentful/rich-text-types";
 import { tagToSlug } from "@/lib/contentful";
+import { BlurImage } from "@/components/blur-image";
 
 /** Slug id for a heading node, matching lib/blog.articleHeadings (for TOC). */
 function headingId(node: any): string {
@@ -78,12 +79,11 @@ const options: Options = {
       const src = url.startsWith("//") ? `https:${url}` : url;
       return (
         <figure className="my-8">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <BlurImage
             src={src}
             alt={title}
-            loading="lazy"
-            className="w-full rounded-lg border border-neutral-20"
+            wrapperClassName="aspect-[16/9] rounded-lg border border-neutral-20"
+            className="h-full w-full object-cover"
           />
           {title ? (
             <figcaption className="mt-2 text-small text-neutral-60">{title}</figcaption>

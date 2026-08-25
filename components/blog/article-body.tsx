@@ -1,6 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { RichText } from "./rich-text";
+import { BlurImage } from "@/components/blur-image";
 import { tagToSlug, type Article } from "@/lib/blog";
 
 /**
@@ -69,12 +70,11 @@ export function ArticleBody({ article }: { article: Article }) {
           ))}
           {s.imageUrl ? (
             <figure className="mt-6">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <BlurImage
                 src={s.imageUrl}
                 alt={s.imageAlt}
-                loading="lazy"
-                className="w-full rounded-lg border border-neutral-20"
+                wrapperClassName="aspect-[16/9] rounded-lg border border-neutral-20"
+                className="h-full w-full object-cover"
               />
             </figure>
           ) : null}

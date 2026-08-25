@@ -6,7 +6,8 @@ import { ArticleBody } from "@/components/blog/article-body";
 import { PostCard, formatDate } from "@/components/blog/post-card";
 import { ReadingProgress } from "@/components/blog/reading-progress";
 import { ArticleToc } from "@/components/blog/article-toc";
-import { ListenButton } from "@/components/blog/listen-button";
+import { WaveformPlayer } from "@/components/blog/waveform-player";
+import { BlurImage } from "@/components/blur-image";
 import { Badge } from "@/components/ui/badge";
 import {
   getAllArticles,
@@ -110,7 +111,7 @@ export default async function BlogPostPage({
                 ))}
               </div>
 
-              <h1 className="mt-4 font-display text-h1 tracking-tight text-neutral-90">
+              <h1 className="mt-4 font-display text-h3 sm:text-h2 tracking-tight text-neutral-90 text-balance">
                 {post.title}
               </h1>
 
@@ -124,8 +125,8 @@ export default async function BlogPostPage({
                 <span>{post.readingMinutes} min de lecture</span>
               </div>
 
-              <div className="mt-6">
-                <ListenButton text={plainText} />
+              <div className="mt-7">
+                <WaveformPlayer text={plainText} />
               </div>
             </div>
           </div>
@@ -134,14 +135,12 @@ export default async function BlogPostPage({
         {/* Cover — centered, slightly wider than the text column */}
         {post.coverImageUrl ? (
           <div className="container pt-10">
-            <div className="mx-auto w-full max-w-[860px]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={post.coverImageUrl}
-                alt={post.coverImageAlt}
-                className="w-full max-h-[520px] object-cover rounded-lg border border-neutral-20"
-              />
-            </div>
+            <BlurImage
+              src={post.coverImageUrl}
+              alt={post.coverImageAlt}
+              wrapperClassName="mx-auto w-full max-w-[860px] aspect-[16/9] rounded-lg border border-neutral-20"
+              className="h-full w-full object-cover"
+            />
           </div>
         ) : null}
 

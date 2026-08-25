@@ -1,6 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { BlurImage } from "@/components/blur-image";
 import type { Article } from "@/lib/blog";
 
 /** Format an ISO date as e.g. "12 août 2026" (French). */
@@ -23,21 +24,20 @@ export function PostCard({ post }: { post: Article }) {
       href={`/blog/${post.slug}`}
       className="group flex flex-col rounded-lg border border-neutral-20 bg-white overflow-hidden transition-shadow duration-200 ease-soft hover:shadow-card"
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-neutral-10">
-        {post.coverImageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={post.coverImageUrl}
-            alt={post.coverImageAlt}
-            loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-soft group-hover:scale-[1.03]"
-          />
-        ) : (
+      {post.coverImageUrl ? (
+        <BlurImage
+          src={post.coverImageUrl}
+          alt={post.coverImageAlt}
+          wrapperClassName="aspect-[16/10]"
+          className="h-full w-full object-cover group-hover:scale-[1.03]"
+        />
+      ) : (
+        <div className="relative aspect-[16/10] overflow-hidden bg-neutral-10">
           <div className="absolute inset-0 grid place-items-center text-neutral-30">
             <span className="font-display text-h4 tracking-tight">VL</span>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="flex flex-1 flex-col p-6">
         <div className="flex flex-wrap items-center gap-2">
