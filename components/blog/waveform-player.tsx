@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Play, Pause, Square, Rewind } from "lucide-react";
+import { Play, Pause, Square, Rewind, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -43,7 +43,7 @@ function fmt(sec: number): string {
 
 export function WaveformPlayer({ text }: { text: string }) {
   const [supported, setSupported] = React.useState(false);
-  const [state, setState] = React.useState<"idle" | "playing" | "paused">("idle");
+  const [state, setState] = React.useState<"idle" | "loading" | "playing" | "paused">("idle");
   const [progress, setProgress] = React.useState(0); // 0..1
   const [rate, setRate] = React.useState<number>(1);
   const rateRef = React.useRef(1);
@@ -84,13 +84,16 @@ export function WaveformPlayer({ text }: { text: string }) {
       const pos = offset + (e.charIndex || 0);
       setProgress(Math.min(1, pos / text.length));
     };
+    u.onstart = () => setState("playing");
     u.onend = () => {
       setProgress(1);
       setState("idle");
     };
     u.onerror = () => setState("idle");
     synth.speak(u);
-    setState("playing");
+    // Speech doesn't begin instantly (engine spin-up / network fetch for the
+    // Google voice) — show a loading state until onstart fires.
+    setState("loading");
   }
 
   function toggle() {
@@ -98,6 +101,10 @@ export function WaveformPlayer({ text }: { text: string }) {
     if (state === "playing") {
       synth.pause();
       setState("paused");
+      return;
+    }
+    if (state === "loading") {
+      stop();
       return;
     }
     if (state === "paused") {
@@ -145,10 +152,15 @@ export function WaveformPlayer({ text }: { text: string }) {
       <button
         type="button"
         onClick={toggle}
-        aria-label={state === "playing" ? "Pause" : "Écouter l'article"}
+        aria-label={
+          state === "playing" ? "Pause" : state === "loading" ? "Chargement…" : "Écouter l'article"
+        }
+        aria-busy={state === "loading"}
         className="grid place-items-center size-10 shrink-0 rounded-full bg-purple-60 text-white shadow-[0_6px_16px_-6px_rgba(113,76,182,0.6)] hover:bg-purple-80 transition-colors duration-200 ease-soft focus-visible:outline-none focus-visible:shadow-focus"
       >
-        {state === "playing" ? (
+        {state === "loading" ? (
+          <Loader2 size={18} strokeWidth={2.25} className="animate-spin" aria-hidden="true" />
+        ) : state === "playing" ? (
           <Pause size={18} strokeWidth={2} className="fill-current" aria-hidden="true" />
         ) : (
           <Play size={18} strokeWidth={2} className="translate-x-0.5 fill-current" aria-hidden="true" />
@@ -170,7 +182,10 @@ export function WaveformPlayer({ text }: { text: string }) {
           const r = e.currentTarget.getBoundingClientRect();
           seek((e.clientX - r.left) / r.width);
         }}
-        className="relative flex h-9 flex-1 items-center gap-[2px] cursor-pointer"
+        className={cn(
+          "relative flex h-9 flex-1 items-center gap-[2px] cursor-pointer",
+          state === "loading" && "opacity-60 animate-pulse"
+        )}
       >
         {BAR_HEIGHTS.map((h, i) => {
           const on = i / BARS <= progress;
