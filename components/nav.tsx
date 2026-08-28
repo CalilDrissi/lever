@@ -52,8 +52,17 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
   const { currency, setCurrency } = useCurrency();
   const lp = useLocalePath();
 
-  // Alternate-locale href (strip or prepend /fr)
+  // Alternate-locale href (strip or prepend /fr).
+  // Blog post detail pages have no translation — redirect to the archive instead.
   const altHref = React.useMemo(() => {
+    const isBlogPost =
+      (pathname.startsWith("/blog/") && !pathname.startsWith("/blog/tag/")) ||
+      (pathname.startsWith("/fr/blog/") && !pathname.startsWith("/fr/blog/tag/"));
+
+    if (isBlogPost) {
+      return locale === "fr" ? "/blog" : "/fr/blog";
+    }
+
     if (locale === "fr") {
       const stripped = pathname.replace(/^\/fr/, "") || "/";
       return stripped;
