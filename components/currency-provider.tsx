@@ -15,14 +15,18 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
       setCurrencyState(cached);
       return;
     }
-    fetch("https://ipapi.co/json/")
+    // Use the Cloudflare Pages Function that reads CF-IPCountry — no third-party,
+    // no rate limits, always accurate on the deployed edge.
+    fetch("/api/geo")
       .then((r) => r.json())
       .then((d) => {
         const detected = detectCurrency(d.country_code || "");
         setCurrencyState(detected);
         localStorage.setItem("vl-currency", detected);
       })
-      .catch(() => {});
+      .catch(() => {
+        // Local dev or fetch failure — stay on EUR default.
+      });
   }, []);
 
   const setCurrency = React.useCallback((c: Currency) => {
