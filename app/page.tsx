@@ -25,6 +25,7 @@ export default function HomePage() {
         <ProviderMarquee />
         <TrustedBy />
         <Pillars />
+        <Resources />
         <Showcase />
         <How />
         <Manifesto />
@@ -32,7 +33,6 @@ export default function HomePage() {
         <Pricing />
         <FAQ />
         <FinalCta />
-        <Resources />
         <Newsletter />
       </main>
       <Footer />
