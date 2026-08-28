@@ -39,7 +39,7 @@ export function Resources() {
           <p className="mt-4 text-lead text-neutral-80">{t.sub}</p>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {t.videos.map((v) => (
             <VideoCard key={v.id} video={v} onOpen={() => setActive(v)} locale={locale} />
           ))}

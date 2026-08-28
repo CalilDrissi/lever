@@ -111,9 +111,9 @@ export function InboxDemo() {
   }, [advance]);
 
   return (
-    <div className="grid lg:grid-cols-12 gap-6 items-start">
+    <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
       {/* Left — keyboard shortcut hints */}
-      <aside className="lg:col-span-3 order-2 lg:order-1">
+      <aside className="sm:col-span-1 lg:col-span-3 order-2 lg:order-1">
         <div className="rounded-xl border border-neutral-20 bg-white p-5">
           <div className="flex items-center gap-2 mb-4">
             <Keyboard
@@ -150,7 +150,7 @@ export function InboxDemo() {
       </aside>
 
       {/* Center — interactive mockup */}
-      <div className="lg:col-span-6 order-1 lg:order-2">
+      <div className="sm:col-span-2 lg:col-span-6 order-1 lg:order-2">
         <div
           className={cn(
             "w-full max-w-[640px] mx-auto rounded-xl bg-neutral-5 border border-neutral-20",
@@ -290,7 +290,7 @@ export function InboxDemo() {
       </div>
 
       {/* Right — live stats */}
-      <aside className="lg:col-span-3 order-3">
+      <aside className="sm:col-span-1 lg:col-span-3 order-3">
         <div className="rounded-xl border border-neutral-20 bg-white p-5 space-y-4">
           <Stat
             label={t.stats.backlog}
@@ -427,7 +427,7 @@ function ScoreGauge({ value, label }: { value: number; label: string }) {
           </motion.span>
         </div>
       </div>
-      <span className="text-eyebrow uppercase text-neutral-60">{label}</span>
+      <span className="text-eyebrow uppercase text-neutral-60 max-w-[76px] text-center leading-tight">{label}</span>
     </div>
   );
 }

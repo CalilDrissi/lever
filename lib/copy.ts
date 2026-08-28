@@ -363,7 +363,7 @@ export const copy = {
     resources: {
       eyebrow: "Ressources",
       title: "La productivité, en clair.",
-      sub: "Trois méthodes qui inspirent Lever — expliquées en quelques minutes.",
+      sub: "Des approches qui inspirent Lever — expliquées en quelques minutes.",
       videos: [
         {
           id: "ZxWjNJSXpi4",
@@ -382,6 +382,24 @@ export const copy = {
           topic: "Une seule chose",
           title: "The One Thing",
           blurb: "La tâche domino : celle qui, une fois faite, simplifie tout le reste.",
+        },
+        {
+          id: "UWrXUOUXopk",
+          topic: "S'organiser",
+          title: "La méthode GTD",
+          blurb: "Vide ta tête, capture tout, concentre-toi sur ce qui compte vraiment.",
+        },
+        {
+          id: "NWUKtyuSPnM",
+          topic: "Concentration",
+          title: "Deep Work",
+          blurb: "La concentration profonde comme avantage concurrentiel dans un monde de distractions.",
+        },
+        {
+          id: "WX-D9WKgZXk",
+          topic: "Inbox zéro",
+          title: "Traiter tous ses mails",
+          blurb: "30 minutes par jour pour atteindre zéro email — et le tenir.",
         },
       ],
     },
@@ -751,7 +769,7 @@ export const copy = {
     resources: {
       eyebrow: "Resources",
       title: "Productivity, clearly explained.",
-      sub: "Three methods that inspire Lever — explained in a few minutes.",
+      sub: "Approaches that inspire Lever — explained in a few minutes.",
       videos: [
         {
           id: "ZxWjNJSXpi4",
@@ -770,6 +788,24 @@ export const copy = {
           topic: "One thing",
           title: "The One Thing",
           blurb: "The domino task: the one that, once done, makes everything else easier.",
+        },
+        {
+          id: "UWrXUOUXopk",
+          topic: "Organise",
+          title: "Getting Things Done (GTD)",
+          blurb: "Clear your head, capture everything, focus only on what matters now.",
+        },
+        {
+          id: "NWUKtyuSPnM",
+          topic: "Deep focus",
+          title: "Deep Work",
+          blurb: "Distraction-free concentration as a competitive advantage.",
+        },
+        {
+          id: "WX-D9WKgZXk",
+          topic: "Clear inbox",
+          title: "Inbox Zero in practice",
+          blurb: "30 minutes a day to reach zero emails — and keep it that way.",
         },
       ],
     },

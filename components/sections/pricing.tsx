@@ -444,7 +444,7 @@ function EnterpriseBand() {
   const lp = useLocalePath();
 
   return (
-    <div className="rounded-xl border border-neutral-20 bg-neutral-5 px-6 py-5 sm:px-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
+    <div className="rounded-xl border border-neutral-20 bg-neutral-5 px-4 py-4 sm:px-6 sm:py-5 md:px-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
           <p className="font-display text-h5 tracking-tight text-neutral-90">Team / Enterprise</p>
@@ -513,9 +513,14 @@ const COL_LABELS: Record<(typeof PLAN_COLS)[number], string> = {
 function FeatureTable({ locale }: { locale: Locale }) {
   return (
     <div>
-      <p className="font-display text-h5 tracking-tight text-neutral-90 mb-6 text-center">
-        {locale === "fr" ? "Comparer les plans" : "Compare plans"}
-      </p>
+      <div className="flex items-center justify-between mb-6">
+        <p className="font-display text-h5 tracking-tight text-neutral-90">
+          {locale === "fr" ? "Comparer les plans" : "Compare plans"}
+        </p>
+        <p className="text-eyebrow uppercase text-neutral-60 sm:hidden">
+          {locale === "fr" ? "← faire défiler →" : "← scroll →"}
+        </p>
+      </div>
       <div className="overflow-x-auto rounded-xl border border-neutral-20">
         <table className="w-full min-w-[620px] text-small">
           <thead>
