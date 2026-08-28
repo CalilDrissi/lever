@@ -15,6 +15,7 @@ import {
   CURRENCY_PREFIX,
   annualSavings,
   FEATURE_MATRIX,
+  localizeFeatureValue,
   type Currency,
 } from "@/lib/currency";
 import type { Locale } from "@/lib/copy";
@@ -480,16 +481,23 @@ function FeatureCell({ value, locale }: { value: import("@/lib/currency").Featur
 
   if (value === true) return <Check size={16} strokeWidth={2.25} className="text-green-60 mx-auto" aria-label={includedLabel} />;
   if (value === false) return <Minus size={14} strokeWidth={1.75} className="text-neutral-30 mx-auto" aria-label={notIncludedLabel} />;
+
+  const display = localizeFeatureValue(value, locale) as string;
+  const isAdvanced = value === "avancé";
+  const isLimited  = value === "limité";
+  const isBasic    = value === "basique";
+  const isCustom   = value === "custom";
+
   return (
     <span className={cn(
       "inline-block px-1.5 py-0.5 rounded text-[11px] font-medium",
-      value === "avancé" ? "bg-purple-10 text-purple-60" :
-      value === "limité" ? "bg-neutral-10 text-neutral-60" :
-      value === "basique" ? "bg-neutral-10 text-neutral-60" :
-      value === "custom" ? "bg-green-10 text-green-60" :
+      isAdvanced ? "bg-purple-10 text-purple-60" :
+      isLimited  ? "bg-neutral-10 text-neutral-60" :
+      isBasic    ? "bg-neutral-10 text-neutral-60" :
+      isCustom   ? "bg-green-10 text-green-60" :
       "text-neutral-80"
     )}>
-      {value}
+      {display}
     </span>
   );
 }
@@ -528,7 +536,7 @@ function FeatureTable({ locale }: { locale: Locale }) {
           <tbody>
             {FEATURE_MATRIX.map((row, i) => (
               <tr key={row.label} className={cn("border-b border-neutral-10 last:border-b-0", i % 2 === 0 ? "bg-white" : "bg-neutral-5/50")}>
-                <td className="px-4 py-2.5 text-neutral-80">{row.label}</td>
+                <td className="px-4 py-2.5 text-neutral-80">{locale === "fr" ? row.label : row.labelEn}</td>
                 {PLAN_COLS.map((col) => (
                   <td key={col} className={cn(
                     "px-3 py-2.5 text-center",
