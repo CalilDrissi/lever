@@ -7,7 +7,8 @@ import * as React from "react";
  * the reader has scrolled through the article element (`targetId`).
  */
 export function ReadingProgress({ targetId }: { targetId: string }) {
-  const [pct, setPct] = React.useState(0);
+  const [scrollPct, setScrollPct] = React.useState(0);
+  const [audioOverride, setAudioOverride] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     const update = () => {
@@ -17,7 +18,7 @@ export function ReadingProgress({ targetId }: { targetId: string }) {
       const end = el.offsetTop + el.offsetHeight - window.innerHeight;
       const span = Math.max(1, end - start);
       const p = ((window.scrollY - start) / span) * 100;
-      setPct(Math.min(100, Math.max(0, p)));
+      setScrollPct(Math.min(100, Math.max(0, p)));
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -28,6 +29,17 @@ export function ReadingProgress({ targetId }: { targetId: string }) {
     };
   }, [targetId]);
 
+  React.useEffect(() => {
+    const onAudioProgress = (e: Event) => {
+      const { pct, active } = (e as CustomEvent<{ pct: number; active: boolean }>).detail;
+      setAudioOverride(active ? pct * 100 : null);
+    };
+    window.addEventListener("audio-progress", onAudioProgress);
+    return () => window.removeEventListener("audio-progress", onAudioProgress);
+  }, []);
+
+  const displayed = audioOverride ?? scrollPct;
+
   return (
     <div
       aria-hidden="true"
@@ -35,7 +47,7 @@ export function ReadingProgress({ targetId }: { targetId: string }) {
     >
       <div
         className="h-full bg-purple-60 transition-[width] duration-100 ease-linear"
-        style={{ width: `${pct}%` }}
+        style={{ width: `${displayed}%` }}
       />
     </div>
   );

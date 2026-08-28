@@ -138,6 +138,15 @@ export function WaveformPlayer({ text }: { text: string }) {
     if (state !== "idle") speakFrom(Math.floor(progress * text.length));
   }
 
+  // Broadcast audio position so ReadingProgress can reflect it.
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const active = state === "playing" || state === "paused";
+    window.dispatchEvent(
+      new CustomEvent("audio-progress", { detail: { pct: progress, active } })
+    );
+  }, [progress, state]);
+
   if (!supported) return null;
 
   const ctrl =
