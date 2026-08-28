@@ -161,13 +161,13 @@ export function InboxDemo() {
         >
           {/* Window chrome */}
           <div className="flex items-center gap-1.5 px-4 h-9 border-b border-neutral-20 bg-neutral-10">
-            <span className="size-2.5 rounded-sm bg-neutral-30" />
-            <span className="size-2.5 rounded-sm bg-neutral-20" />
-            <span className="size-2.5 rounded-sm bg-neutral-20" />
-            <span className="ml-3 text-eyebrow uppercase text-neutral-60">
+            <span className="size-2.5 rounded-sm bg-neutral-30 shrink-0" />
+            <span className="size-2.5 rounded-sm bg-neutral-20 shrink-0" />
+            <span className="size-2.5 rounded-sm bg-neutral-20 shrink-0" />
+            <span className="ml-3 text-eyebrow uppercase text-neutral-60 truncate min-w-0">
               {inbox.heading}
             </span>
-            <span className="ml-auto text-eyebrow uppercase text-neutral-60 tabular-nums">
+            <span className="ml-auto shrink-0 text-eyebrow uppercase text-neutral-60 tabular-nums">
               {formatElapsed(elapsed)}
             </span>
           </div>
