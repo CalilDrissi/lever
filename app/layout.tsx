@@ -3,6 +3,7 @@ import "./globals.css";
 import { CurrencyProvider } from "@/components/currency-provider";
 import { LocaleProvider } from "@/components/locale-provider";
 import { LocaleSync } from "@/components/locale-sync";
+import { CookieBanner } from "@/components/cookie-banner";
 
 export const metadata: Metadata = {
   title: "Virtus Lever — Turn your inbox into one clear priority a day.",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <CurrencyProvider>
             <LocaleSync />
             {children}
+            <CookieBanner />
           </CurrencyProvider>
         </LocaleProvider>
       </body>
