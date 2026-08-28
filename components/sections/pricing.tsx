@@ -285,7 +285,7 @@ function PlanCard({ plan, annual, reduce }: { plan: Plan; annual: boolean; reduc
 
       {/* CTA */}
       <a href={plan.ctaHref} className="block">
-        <Button variant={plan.ctaVariant} size="md" className={cn("w-full group", plan.featured && "shadow-[0_6px_16px_-6px_rgba(113,76,182,0.5)]")}>
+        <Button variant={plan.ctaVariant} size="md" className={cn("w-full group whitespace-nowrap justify-center", plan.featured && "shadow-[0_6px_16px_-6px_rgba(113,76,182,0.5)]")}>
           {plan.cta}
           {plan.featured
             ? <ArrowRight size={16} strokeWidth={2} className="transition-transform duration-300 ease-soft group-hover:translate-x-0.5" aria-hidden="true" />
