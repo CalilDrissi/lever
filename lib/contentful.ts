@@ -109,7 +109,7 @@ export async function getAllPosts(locale: "en" | "fr" = "fr"): Promise<BlogPost[
     const res = await client.getEntries<BlogPostSkeleton>({
       content_type: BLOG_POST_TYPE,
       "fields.lang": locale,
-      locale: "en-US",
+      locale: locale === "fr" ? "fr" : "en-US",
       order: ["-fields.publishedDate"],
       include: 2,
       limit: 1000,
@@ -130,7 +130,7 @@ export async function getPostBySlug(slug: string, locale: "en" | "fr" = "fr"): P
       content_type: BLOG_POST_TYPE,
       "fields.slug": slug,
       "fields.lang": locale,
-      locale: "en-US",
+      locale: locale === "fr" ? "fr" : "en-US",
       include: 2,
       limit: 1,
     });
