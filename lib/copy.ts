@@ -384,7 +384,7 @@ export const copy = {
           blurb: "La tâche domino : celle qui, une fois faite, simplifie tout le reste.",
         },
         {
-          id: "UWrXUOUXopk",
+          id: "idNGjollSQM",
           topic: "S'organiser",
           title: "La méthode GTD",
           blurb: "Vide ta tête, capture tout, concentre-toi sur ce qui compte vraiment.",
@@ -790,7 +790,7 @@ export const copy = {
           blurb: "The domino task: the one that, once done, makes everything else easier.",
         },
         {
-          id: "UWrXUOUXopk",
+          id: "idNGjollSQM",
           topic: "Organise",
           title: "Getting Things Done (GTD)",
           blurb: "Clear your head, capture everything, focus only on what matters now.",

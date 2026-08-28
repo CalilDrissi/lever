@@ -124,7 +124,7 @@ export default async function BlogPostPage({
               </div>
 
               <div className="mt-7">
-                <WaveformPlayer text={plainText} />
+                <WaveformPlayer text={plainText} locale="en" />
               </div>
             </div>
           </div>

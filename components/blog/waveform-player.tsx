@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils";
  * bars pulse while speaking. Progress tracks the speech engine's word-boundary
  * events. Controls: rewind, play/pause, stop, click-to-seek, playback speed.
  *
- * Voice: locked to Google français (fr-FR), with a plain fr-FR fallback on
- * browsers that don't ship the Google voice.
+ * Voice: locale-aware. For fr posts → Google fr-FR with plain fr-FR fallback.
+ * For en posts → Google en-US / en-GB with plain en-US fallback.
  */
 const BARS = 64;
 const SPEEDS = [1, 1.25, 1.5, 2, 0.75] as const;
@@ -26,12 +26,23 @@ const BAR_HEIGHTS: number[] = Array.from({ length: BARS }, (_, i) => {
   return Math.max(0.18, Math.min(1, h));
 });
 
-function pickVoice(synth: SpeechSynthesis): SpeechSynthesisVoice | null {
+function pickVoice(synth: SpeechSynthesis, locale: "en" | "fr"): SpeechSynthesisVoice | null {
   const vs = synth.getVoices();
+  if (locale === "fr") {
+    return (
+      vs.find((v) => /google/i.test(v.name) && v.lang.toLowerCase().startsWith("fr")) ||
+      vs.find((v) => v.lang.toLowerCase() === "fr-fr") ||
+      vs.find((v) => v.lang.toLowerCase().startsWith("fr")) ||
+      null
+    );
+  }
+  // English: prefer Google en-US, then en-GB, then any en voice
   return (
-    vs.find((v) => /google/i.test(v.name) && v.lang.toLowerCase().startsWith("fr")) ||
-    vs.find((v) => v.lang.toLowerCase() === "fr-fr") ||
-    vs.find((v) => v.lang.toLowerCase().startsWith("fr")) ||
+    vs.find((v) => /google/i.test(v.name) && v.lang.toLowerCase() === "en-us") ||
+    vs.find((v) => /google/i.test(v.name) && v.lang.toLowerCase().startsWith("en")) ||
+    vs.find((v) => v.lang.toLowerCase() === "en-us") ||
+    vs.find((v) => v.lang.toLowerCase() === "en-gb") ||
+    vs.find((v) => v.lang.toLowerCase().startsWith("en")) ||
     null
   );
 }
@@ -41,7 +52,7 @@ function fmt(sec: number): string {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 }
 
-export function WaveformPlayer({ text }: { text: string }) {
+export function WaveformPlayer({ text, locale = "fr" }: { text: string; locale?: "en" | "fr" }) {
   const [supported, setSupported] = React.useState(false);
   const [state, setState] = React.useState<"idle" | "loading" | "playing" | "paused">("idle");
   const [progress, setProgress] = React.useState(0); // 0..1
@@ -101,8 +112,8 @@ export function WaveformPlayer({ text }: { text: string }) {
     const startFraction = offset / Math.max(1, text.length);
     setProgress(startFraction);
     const u = new SpeechSynthesisUtterance(text.slice(offset));
-    u.lang = "fr-FR";
-    const voice = pickVoice(synth);
+    u.lang = locale === "fr" ? "fr-FR" : "en-US";
+    const voice = pickVoice(synth, locale);
     if (voice) u.voice = voice;
     u.rate = rateRef.current;
     u.pitch = 1;
@@ -189,7 +200,7 @@ export function WaveformPlayer({ text }: { text: string }) {
 
   return (
     <div className="flex items-center gap-2 rounded-full border border-neutral-20 bg-neutral-5 p-2 pr-3">
-      <button type="button" onClick={rewind} aria-label={`Reculer de ${REWIND_SEC} secondes`} className={ctrl}>
+      <button type="button" onClick={rewind} aria-label={locale === "fr" ? `Reculer de ${REWIND_SEC} secondes` : `Rewind ${REWIND_SEC} seconds`} className={ctrl}>
         <Rewind size={16} strokeWidth={2} className="fill-current" aria-hidden="true" />
       </button>
 
@@ -197,7 +208,9 @@ export function WaveformPlayer({ text }: { text: string }) {
         type="button"
         onClick={toggle}
         aria-label={
-          state === "playing" ? "Pause" : state === "loading" ? "Chargement…" : "Écouter l'article"
+          state === "playing" ? "Pause" :
+          state === "loading" ? (locale === "fr" ? "Chargement…" : "Loading…") :
+          (locale === "fr" ? "Écouter l'article" : "Listen to article")
         }
         aria-busy={state === "loading"}
         className="grid place-items-center size-10 shrink-0 rounded-full bg-purple-60 text-white shadow-[0_6px_16px_-6px_rgba(113,76,182,0.6)] hover:bg-purple-80 transition-colors duration-200 ease-soft focus-visible:outline-none focus-visible:shadow-focus"
@@ -211,13 +224,13 @@ export function WaveformPlayer({ text }: { text: string }) {
         )}
       </button>
 
-      <button type="button" onClick={stop} aria-label="Arrêter" className={ctrl}>
+      <button type="button" onClick={stop} aria-label={locale === "fr" ? "Arrêter" : "Stop"} className={ctrl}>
         <Square size={14} strokeWidth={2} className="fill-current" aria-hidden="true" />
       </button>
 
       <div
         role="slider"
-        aria-label="Progression de la lecture"
+        aria-label={locale === "fr" ? "Progression de la lecture" : "Reading progress"}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(progress * 100)}
@@ -257,7 +270,7 @@ export function WaveformPlayer({ text }: { text: string }) {
       <button
         type="button"
         onClick={cycleSpeed}
-        aria-label={`Vitesse de lecture : ${rate}×`}
+        aria-label={locale === "fr" ? `Vitesse de lecture : ${rate}×` : `Playback speed: ${rate}×`}
         className="shrink-0 rounded-full border border-neutral-20 bg-white px-2.5 py-1 text-small tabular-nums font-medium text-neutral-80 hover:text-neutral-90 hover:border-neutral-30 transition-colors duration-200 ease-soft focus-visible:outline-none focus-visible:shadow-focus"
       >
         {rate}×
