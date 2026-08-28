@@ -111,7 +111,7 @@ export function InboxDemo() {
   }, [advance]);
 
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
       {/* Left — keyboard shortcut hints */}
       <aside className="sm:col-span-1 lg:col-span-3 order-2 lg:order-1">
         <div className="rounded-xl border border-neutral-20 bg-white p-5">
