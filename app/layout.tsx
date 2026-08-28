@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { CurrencyProvider } from "@/components/currency-provider";
 
 export const metadata: Metadata = {
   title: "Virtus Lever — Transforme ton inbox en 1 priorité claire par jour.",
@@ -29,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className="min-h-screen bg-white text-neutral-90 antialiased">
-        {children}
+        <CurrencyProvider>{children}</CurrencyProvider>
       </body>
     </html>
   );

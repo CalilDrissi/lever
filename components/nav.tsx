@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { copy } from "@/lib/copy";
 import { AUTH_LINKS } from "@/lib/links";
 import { cn } from "@/lib/utils";
+import { useCurrency } from "@/components/currency-provider";
+import type { Currency } from "@/lib/currency";
+
+const CURRENCIES: Currency[] = ["MAD", "EUR", "USD"];
 
 /**
  * Nav — floating pill, Superhuman-adjacent.
@@ -29,6 +33,7 @@ import { cn } from "@/lib/utils";
 export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
   const t = copy.fr.nav;
   const brand = copy.fr.brand;
+  const { currency, setCurrency } = useCurrency();
 
   const [scrolled, setScrolled] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
@@ -133,6 +138,28 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
 
           {/* CTA cluster — only at lg+ */}
           <div className="ml-auto hidden lg:flex items-center gap-1.5">
+            {/* Currency switcher */}
+            <div className={cn(
+              "flex items-center rounded-full border p-0.5 mr-1",
+              inverted ? "border-white/20" : "border-neutral-20"
+            )}>
+              {CURRENCIES.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCurrency(c)}
+                  className={cn(
+                    "px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide transition-colors duration-150 ease-soft",
+                    currency === c
+                      ? inverted ? "bg-white text-neutral-90" : "bg-neutral-90 text-white"
+                      : inverted ? "text-white/70 hover:text-white" : "text-neutral-60 hover:text-neutral-90"
+                  )}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+
             <a
               href={AUTH_LINKS.login}
               className={cn(
@@ -204,7 +231,25 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
               <DrawerLink href="/blog" onSelect={() => setOpen(false)}>
                 {t.blog}
               </DrawerLink>
-              <div className="mt-4 pt-4 border-t border-neutral-20 flex items-center gap-3">
+              <div className="mt-4 pt-4 border-t border-neutral-20 flex items-center gap-2">
+                <span className="text-small text-neutral-60">Devise :</span>
+                {CURRENCIES.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setCurrency(c)}
+                    className={cn(
+                      "px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide border transition-colors duration-150",
+                      currency === c
+                        ? "bg-neutral-90 text-white border-neutral-90"
+                        : "border-neutral-20 text-neutral-60 hover:text-neutral-90"
+                    )}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-3 flex items-center gap-3">
                 <a
                   href={AUTH_LINKS.login}
                   onClick={() => setOpen(false)}
