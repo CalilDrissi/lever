@@ -240,7 +240,7 @@ export function WaveformPlayer({ text, locale = "fr" }: { text: string; locale?:
           seek((e.clientX - r.left) / r.width);
         }}
         className={cn(
-          "relative flex h-9 flex-1 items-center gap-[2px] cursor-pointer",
+          "relative hidden sm:flex h-9 flex-1 items-center gap-[2px] cursor-pointer",
           state === "loading" && "opacity-60 animate-pulse"
         )}
       >
