@@ -772,37 +772,37 @@ export const copy = {
       sub: "Approaches that inspire Lever — explained in a few minutes.",
       videos: [
         {
-          id: "ZxWjNJSXpi4",
+          id: "tT89OZ7TNwc",
           topic: "Prioritise",
           title: "The Eisenhower Matrix",
           blurb: "Urgent or important? Sort your tasks along the two axes that count.",
         },
         {
-          id: "gvLiTG3Webg",
+          id: "Wxnv5PspT7E",
           topic: "Focus effort",
           title: "The Pareto Principle (80/20)",
           blurb: "20% of your actions produce 80% of results. The core of leverage.",
         },
         {
-          id: "zsf0nDtH0UU",
+          id: "CuD3KVRQM_o",
           topic: "One thing",
           title: "The One Thing",
           blurb: "The domino task: the one that, once done, makes everything else easier.",
         },
         {
-          id: "idNGjollSQM",
+          id: "gCswMsONkwY",
           topic: "Organise",
           title: "Getting Things Done (GTD)",
           blurb: "Clear your head, capture everything, focus only on what matters now.",
         },
         {
-          id: "NWUKtyuSPnM",
+          id: "d66815uVerk",
           topic: "Deep focus",
           title: "Deep Work",
           blurb: "Distraction-free concentration as a competitive advantage.",
         },
         {
-          id: "WX-D9WKgZXk",
+          id: "uXdEVeoGRRc",
           topic: "Clear inbox",
           title: "Inbox Zero in practice",
           blurb: "30 minutes a day to reach zero emails — and keep it that way.",
