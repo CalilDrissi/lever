@@ -49,6 +49,30 @@ export function WaveformPlayer({ text }: { text: string }) {
   const rateRef = React.useRef(1);
   rateRef.current = rate;
 
+  // Time-based progress ticker — used because Google TTS never fires onboundary.
+  const tickRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+  const tickStartTimeRef = React.useRef(0);
+  const tickStartFractionRef = React.useRef(0);
+  const tickDurRef = React.useRef(1);
+
+  function clearTick() {
+    if (tickRef.current) { clearInterval(tickRef.current); tickRef.current = null; }
+  }
+
+  function startTick(startFraction: number, totalSecLocal: number) {
+    clearTick();
+    tickStartTimeRef.current = Date.now();
+    tickStartFractionRef.current = startFraction;
+    // Remaining duration at current rate
+    tickDurRef.current = Math.max(0.1, totalSecLocal * (1 - startFraction) / rateRef.current);
+    tickRef.current = setInterval(() => {
+      const elapsed = (Date.now() - tickStartTimeRef.current) / 1000;
+      const pct = tickStartFractionRef.current +
+        (elapsed / tickDurRef.current) * (1 - tickStartFractionRef.current);
+      setProgress(Math.min(0.999, pct));
+    }, 100);
+  }
+
   const words = React.useMemo(
     () => text.trim().split(/\s+/).filter(Boolean).length,
     [text]
@@ -59,40 +83,48 @@ export function WaveformPlayer({ text }: { text: string }) {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
     setSupported(true);
     const synth = window.speechSynthesis;
-    // Warm the voice list (loads asynchronously in Chrome).
     const warm = () => synth.getVoices();
     warm();
     synth.addEventListener("voiceschanged", warm);
     return () => {
       synth.removeEventListener("voiceschanged", warm);
       synth.cancel();
+      clearTick();
     };
   }, []);
 
   function speakFrom(charOffset: number) {
+    clearTick();
     const synth = window.speechSynthesis;
     synth.cancel();
     const offset = Math.max(0, Math.min(text.length, charOffset));
-    setProgress(offset / Math.max(1, text.length));
+    const startFraction = offset / Math.max(1, text.length);
+    setProgress(startFraction);
     const u = new SpeechSynthesisUtterance(text.slice(offset));
     u.lang = "fr-FR";
     const voice = pickVoice(synth);
     if (voice) u.voice = voice;
     u.rate = rateRef.current;
     u.pitch = 1;
+    // onboundary fires on some voices — use it as a more accurate override when available.
     u.onboundary = (e) => {
       const pos = offset + (e.charIndex || 0);
       setProgress(Math.min(1, pos / text.length));
     };
-    u.onstart = () => setState("playing");
+    u.onstart = () => {
+      setState("playing");
+      startTick(startFraction, totalSec);
+    };
     u.onend = () => {
+      clearTick();
       setProgress(1);
       setState("idle");
     };
-    u.onerror = () => setState("idle");
+    u.onerror = () => {
+      clearTick();
+      setState("idle");
+    };
     synth.speak(u);
-    // Speech doesn't begin instantly (engine spin-up / network fetch for the
-    // Google voice) — show a loading state until onstart fires.
     setState("loading");
   }
 
@@ -100,6 +132,7 @@ export function WaveformPlayer({ text }: { text: string }) {
     const synth = window.speechSynthesis;
     if (state === "playing") {
       synth.pause();
+      clearTick();
       setState("paused");
       return;
     }
@@ -109,6 +142,7 @@ export function WaveformPlayer({ text }: { text: string }) {
     }
     if (state === "paused") {
       synth.resume();
+      startTick(progress, totalSec);
       setState("playing");
       return;
     }
@@ -116,6 +150,7 @@ export function WaveformPlayer({ text }: { text: string }) {
   }
 
   function stop() {
+    clearTick();
     window.speechSynthesis.cancel();
     setState("idle");
     setProgress(0);
