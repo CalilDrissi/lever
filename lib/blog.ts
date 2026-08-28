@@ -132,10 +132,20 @@ function sortByDateDesc(a: Article, b: Article) {
 export async function getAllArticles(locale: "en" | "fr" = "fr"): Promise<Article[]> {
   const cf = (await cfGetAll(locale)).map(contentfulToArticle);
   if (locale === "en") return cf.sort(sortByDateDesc);
-  // FR: seed posts as base, Contentful overrides
+  // FR: seed posts as base, Contentful overrides.
+  // If a Contentful post has no coverImageUrl (happens when the fr locale
+  // is missing asset file fields — assets are en-US only by default),
+  // keep the matching seed image so cards never show a blank placeholder.
   const bySlug = new Map<string, Article>();
   for (const a of SEED_ARTICLES) bySlug.set(a.slug, a);
-  for (const a of cf) bySlug.set(a.slug, a);
+  for (const a of cf) {
+    const seed = bySlug.get(a.slug);
+    bySlug.set(a.slug, {
+      ...a,
+      coverImageUrl: a.coverImageUrl ?? seed?.coverImageUrl ?? null,
+      coverImageAlt: a.coverImageAlt || seed?.coverImageAlt || a.title,
+    });
+  }
   return [...bySlug.values()].sort(sortByDateDesc);
 }
 

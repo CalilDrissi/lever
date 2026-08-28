@@ -7,28 +7,28 @@ import { copy } from "@/lib/copy";
 export const metadata: Metadata = {
   title: "Contact — Virtus Lever",
   description:
-    "Une question, une démo, un partenariat ? Écris à l'équipe Virtus Lever. Réponse sous un jour ouvré.",
+    "A question, a demo, a partnership? Write to the Virtus Lever team. We reply within one business day.",
   alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {
-  const domain = copy.fr.brand.domain;
+  const domain = copy.en.brand.domain;
 
   const channels = [
     {
       icon: Mail,
-      title: "Écris-nous",
+      title: "Write to us",
       body: `hello@${domain}`,
       href: `mailto:hello@${domain}`,
     },
     {
       icon: MessageSquare,
-      title: "Support & démo",
-      body: "On te montre le cockpit en 15 minutes.",
+      title: "Support & demo",
+      body: "We'll show you the cockpit in 15 minutes.",
     },
     {
       icon: Shield,
-      title: "Sécurité & RGPD",
+      title: "Security & privacy",
       body: `privacy@${domain}`,
       href: `mailto:privacy@${domain}`,
     },
@@ -38,8 +38,8 @@ export default function ContactPage() {
     <PageShell>
       <PageHeader
         eyebrow="Contact"
-        title="Parlons de ton inbox."
-        lead="Une question, une démo, un sujet sécurité ou un partenariat — écris-nous. On répond vite, et par un humain."
+        title="Let's talk about your inbox."
+        lead="A question, a demo, a security topic or a partnership — write to us. We reply fast, and by a human."
       />
 
       <Section>
@@ -52,7 +52,7 @@ export default function ContactPage() {
           {/* Channels */}
           <div className="lg:col-span-5 lg:border-l lg:border-neutral-20 lg:pl-12">
             <p className="text-eyebrow uppercase text-neutral-80 mb-6">
-              Autres canaux
+              Other channels
             </p>
             <ul className="space-y-8">
               {channels.map((c) => {
@@ -89,7 +89,7 @@ export default function ContactPage() {
 
             <div className="mt-10 pt-8 border-t border-neutral-20">
               <p className="text-small text-neutral-60">
-                Virtus Lever — fait en France 🇫🇷. Données hébergées en Europe.
+                Virtus Lever — built in France 🇫🇷. Data hosted in Europe.
               </p>
             </div>
           </div>

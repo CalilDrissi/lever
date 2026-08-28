@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { CurrencyProvider } from "@/components/currency-provider";
+import { LocaleProvider } from "@/components/locale-provider";
+import { LocaleSync } from "@/components/locale-sync";
 
 export const metadata: Metadata = {
-  title: "Virtus Lever — Transforme ton inbox en 1 priorité claire par jour.",
+  title: "Virtus Lever — Turn your inbox into one clear priority a day.",
   description:
-    "Cockpit de productivité pour l'email. L'algorithme Domino trouve l'email à plus haut levier — 10 min/jour, -30% de backlog.",
+    "Email productivity cockpit. The Domino algorithm finds the highest-leverage email — 10 min/day, −30% backlog.",
   metadataBase: new URL("https://virtuslever.com"),
   // Canonical URL — points every page back to virtuslever.com so search
   // engines never treat the *.pages.dev preview hosts as the source of
@@ -28,9 +30,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
+    <html lang="en">
       <body className="min-h-screen bg-white text-neutral-90 antialiased">
-        <CurrencyProvider>{children}</CurrencyProvider>
+        <LocaleProvider locale="en">
+          <CurrencyProvider>
+            <LocaleSync />
+            {children}
+          </CurrencyProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

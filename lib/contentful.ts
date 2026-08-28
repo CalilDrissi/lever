@@ -42,7 +42,6 @@ export type BlogPostSkeleton = EntrySkeletonType<
     tags: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
     publishedDate: EntryFieldTypes.Date;
     author: EntryFieldTypes.Symbol;
-    locale: EntryFieldTypes.Symbol;
   },
   typeof BLOG_POST_TYPE
 >;
@@ -97,19 +96,61 @@ function toPost(entry: Entry<BlogPostSkeleton>): BlogPost {
   };
 }
 
-/** All posts for a locale, newest first. Returns [] when unconfigured or on error. */
+/** All posts for a locale, newest first. Returns [] when unconfigured or on error.
+ *
+ * Uses Contentful native locale querying:
+ *   fr → locale=fr (only entries with explicit fr content)
+ *   en → locale=en-US minus entries that also exist in fr (those are FR posts)
+ */
 export async function getAllPosts(locale: "en" | "fr" = "fr"): Promise<BlogPost[]> {
   const client = getClient();
   if (!client) return [];
   try {
-    const res = await client.getEntries<BlogPostSkeleton>({
-      content_type: BLOG_POST_TYPE,
-      "fields.locale": locale,
-      order: ["-fields.publishedDate"],
-      include: 2,
-      limit: 1000,
-    });
-    return res.items.map(toPost);
+    if (locale === "fr") {
+      // Run both queries in parallel:
+      //   frData  — full entry data (locale=fr, with include:2 for assets)
+      //   frIds   — IDs of entries that truly have explicit fr content
+      // Contentful returns all entries when include:2 is set, falling back to
+      // en-US for entries with no fr locale values. The select:["sys.id"] query
+      // returns only entries that actually have fr content, so filtering by it
+      // prevents EN-only entries from appearing in the FR blog.
+      const [frData, frIds] = await Promise.all([
+        client.getEntries<BlogPostSkeleton>({
+          content_type: BLOG_POST_TYPE,
+          locale: "fr",
+          order: ["-fields.publishedDate"],
+          include: 2,
+          limit: 1000,
+        }),
+        client.getEntries<BlogPostSkeleton>({
+          content_type: BLOG_POST_TYPE,
+          locale: "fr",
+          limit: 1000,
+          select: ["sys.id"],
+        }),
+      ]);
+      const frIdSet = new Set(frIds.items.map((e) => e.sys.id));
+      return frData.items.filter((e) => frIdSet.has(e.sys.id)).map(toPost);
+    }
+    // EN: get all en-US entries, subtract those that also have fr content
+    const [enRes, frRes] = await Promise.all([
+      client.getEntries<BlogPostSkeleton>({
+        content_type: BLOG_POST_TYPE,
+        locale: "en-US",
+        order: ["-fields.publishedDate"],
+        include: 2,
+        limit: 1000,
+        select: ["sys.id", "fields.title", "fields.slug", "fields.excerpt", "fields.body", "fields.coverImage", "fields.tags", "fields.publishedDate", "fields.author"],
+      }),
+      client.getEntries<BlogPostSkeleton>({
+        content_type: BLOG_POST_TYPE,
+        locale: "fr",
+        limit: 1000,
+        select: ["sys.id"],
+      }),
+    ]);
+    const frIds = new Set(frRes.items.map((e) => e.sys.id));
+    return enRes.items.filter((e) => !frIds.has(e.sys.id)).map(toPost);
   } catch (err) {
     console.warn("[contentful] getAllPosts failed:", (err as Error).message);
     return [];
@@ -121,15 +162,26 @@ export async function getPostBySlug(slug: string, locale: "en" | "fr" = "fr"): P
   const client = getClient();
   if (!client) return null;
   try {
+    const cfLocale = locale === "fr" ? "fr" : "en-US";
     const res = await client.getEntries<BlogPostSkeleton>({
       content_type: BLOG_POST_TYPE,
       "fields.slug": slug,
-      "fields.locale": locale,
+      locale: cfLocale,
       include: 2,
       limit: 1,
     });
     const item = res.items[0];
-    return item ? toPost(item) : null;
+    if (!item) return null;
+    // For EN queries, confirm this entry doesn't have fr content (i.e., it's truly EN)
+    if (locale === "en") {
+      try {
+        await client.getEntry<BlogPostSkeleton>(item.sys.id, { locale: "fr" });
+        return null; // fr content exists → this is a FR post
+      } catch {
+        // 404 = no fr content → genuine EN post
+      }
+    }
+    return toPost(item);
   } catch (err) {
     console.warn("[contentful] getPostBySlug failed:", (err as Error).message);
     return null;

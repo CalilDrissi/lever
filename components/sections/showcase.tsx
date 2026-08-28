@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { copy } from "@/lib/copy";
+import { useLocale, useLocalePath } from "@/components/locale-provider";
 import { images, px } from "@/lib/images";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +22,9 @@ const KEY_TO_IMG = {
  * scales 1.04 for a quiet "alive" feel.
  */
 export function Showcase() {
-  const t = copy.fr.showcase;
+  const locale = useLocale();
+  const lp = useLocalePath();
+  const t = copy[locale].showcase;
 
   return (
     <section className="relative bg-neutral-5 border-y border-neutral-20">
@@ -59,9 +62,10 @@ export function Showcase() {
               tag={card.tag}
               title={card.title}
               body={card.body}
-              href={card.href}
+              href={lp(card.href)}
               imageKey={card.key as keyof typeof KEY_TO_IMG}
               index={i}
+              readMore={locale === "fr" ? "En savoir plus" : "Read more"}
             />
           ))}
         </div>
@@ -77,6 +81,7 @@ function ShowcaseCard({
   href,
   imageKey,
   index,
+  readMore,
 }: {
   tag: string;
   title: string;
@@ -84,6 +89,7 @@ function ShowcaseCard({
   href: string;
   imageKey: keyof typeof KEY_TO_IMG;
   index: number;
+  readMore: string;
 }) {
   const img = KEY_TO_IMG[imageKey];
   const reduce = useReducedMotion();
@@ -135,7 +141,7 @@ function ShowcaseCard({
         </h3>
         <p className="mt-3 text-body text-neutral-80 max-w-[36ch]">{body}</p>
         <span className="mt-5 inline-flex items-center gap-1.5 text-small text-neutral-80 group-hover:text-purple-60 transition-colors duration-200 ease-soft">
-          En savoir plus
+          {readMore}
           <ArrowUpRight
             size={14}
             strokeWidth={1.75}

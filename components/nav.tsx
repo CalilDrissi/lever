@@ -2,15 +2,32 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { copy } from "@/lib/copy";
 import { AUTH_LINKS } from "@/lib/links";
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/components/currency-provider";
+import { useLocalePath } from "@/components/locale-provider";
+import { NavDropdown, DropdownItem } from "@/components/nav-dropdown";
 import type { Currency } from "@/lib/currency";
+import { FranceFlag } from "@/components/icons/france-flag";
+import { GBFlag } from "@/components/icons/gb-flag";
+import { EUFlag } from "@/components/icons/eu-flag";
+import { USFlag } from "@/components/icons/us-flag";
+import { MoroccoFlag } from "@/components/icons/morocco-flag";
 
-const CURRENCIES: Currency[] = ["MAD", "EUR", "USD"];
+const CURRENCIES: { code: Currency; label: string; Flag: React.FC<{ size?: number; className?: string }> }[] = [
+  { code: "EUR", label: "EUR — Euro",    Flag: EUFlag },
+  { code: "USD", label: "USD — Dollar",  Flag: USFlag },
+  { code: "MAD", label: "MAD — Dirham",  Flag: MoroccoFlag },
+];
+
+const LANGUAGES = [
+  { code: "en" as const, label: "English",  Flag: GBFlag },
+  { code: "fr" as const, label: "Français", Flag: FranceFlag },
+];
 
 /**
  * Nav — floating pill, Superhuman-adjacent.
@@ -25,15 +42,24 @@ const CURRENCIES: Currency[] = ["MAD", "EUR", "USD"];
  *
  * Layout (≥ lg): logo · nav links · ctas
  * Layout (< lg): logo · menu button (drawer holds links + ctas)
- *
- * The pill only reads as "over the hero" while we're at the top of the
- * page. Once the user scrolls past 8px, we switch to the solid mode so
- * the chrome doesn't sit transparent over white sections later.
  */
 export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
-  const t = copy.fr.nav;
-  const brand = copy.fr.brand;
+  const pathname = usePathname();
+  const router = useRouter();
+  const locale = pathname.startsWith("/fr") ? "fr" : "en";
+  const t = copy[locale].nav;
+  const brand = copy[locale].brand;
   const { currency, setCurrency } = useCurrency();
+  const lp = useLocalePath();
+
+  // Alternate-locale href (strip or prepend /fr)
+  const altHref = React.useMemo(() => {
+    if (locale === "fr") {
+      const stripped = pathname.replace(/^\/fr/, "") || "/";
+      return stripped;
+    }
+    return "/fr" + (pathname === "/" ? "" : pathname);
+  }, [locale, pathname]);
 
   const [scrolled, setScrolled] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
@@ -41,8 +67,6 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
   const lastY = React.useRef(0);
 
   React.useEffect(() => {
-    // Smart-sticky: reveal near the top and when scrolling up; hide when
-    // scrolling down past a small threshold.
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 8);
@@ -59,18 +83,19 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
 
   React.useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  // Inverted = floating over the navy hero. Opening the drawer always
-  // forces the solid mode so the drawer reads cleanly. Interior pages
-  // (no dark hero behind the pill) pass forceSolid so the pill never
-  // renders white-on-white at the top of the page.
   const inverted = !forceSolid && !scrolled && !open;
-  // Never hide while the mobile drawer is open.
   const isHidden = hidden && !open;
+
+  // Currency flag for the trigger
+  const currencyEntry = CURRENCIES.find((c) => c.code === currency) ?? CURRENCIES[0];
+  const CurrencyFlag = currencyEntry.Flag;
+
+  // Language flag for the trigger
+  const langEntry = LANGUAGES.find((l) => l.code === locale) ?? LANGUAGES[0];
+  const LangFlag = langEntry.Flag;
 
   return (
     <header
@@ -93,7 +118,7 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
         >
           {/* Logo */}
           <Link
-            href="/"
+            href={lp("/")}
             className="flex items-center gap-2 shrink-0"
             onClick={() => setOpen(false)}
           >
@@ -108,7 +133,7 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
             </span>
           </Link>
 
-          {/* Divider — quiet hairline between logo and nav links */}
+          {/* Divider */}
           <span
             aria-hidden="true"
             className={cn(
@@ -117,53 +142,86 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
             )}
           />
 
-          {/* Nav links — visible from lg up */}
+          {/* Nav links */}
           <nav className="hidden lg:flex items-center gap-6">
-            <NavLink href="/#product" inverted={inverted}>
-              {t.product}
-            </NavLink>
-            <NavLink href="/#pricing" inverted={inverted}>
-              {t.pricing}
-            </NavLink>
-            <NavLink href="/#manifesto" inverted={inverted}>
-              {t.manifesto}
-            </NavLink>
-            <NavLink href="/#security" inverted={inverted}>
-              {t.security}
-            </NavLink>
-            <NavLink href="/blog" inverted={inverted}>
-              {t.blog}
-            </NavLink>
+            <NavLink href={lp("/#product")} inverted={inverted}>{t.product}</NavLink>
+            <NavLink href={lp("/#pricing")} inverted={inverted}>{t.pricing}</NavLink>
+            <NavLink href={lp("/#manifesto")} inverted={inverted}>{t.manifesto}</NavLink>
+            <NavLink href={lp("/#security")} inverted={inverted}>{t.security}</NavLink>
+            <NavLink href={lp("/blog")} inverted={inverted}>{t.blog}</NavLink>
           </nav>
 
           {/* CTA cluster — only at lg+ */}
-          <div className="ml-auto hidden lg:flex items-center gap-1.5">
-            {/* Currency switcher */}
-            <div className={cn(
-              "flex items-center rounded-full border p-0.5 mr-1",
-              inverted ? "border-white/20" : "border-neutral-20"
-            )}>
-              {CURRENCIES.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => setCurrency(c)}
-                  className={cn(
-                    "px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide transition-colors duration-150 ease-soft",
-                    currency === c
-                      ? inverted ? "bg-white text-neutral-90" : "bg-neutral-90 text-white"
-                      : inverted ? "text-white/70 hover:text-white" : "text-neutral-60 hover:text-neutral-90"
-                  )}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
+          <div className="ml-auto hidden lg:flex items-center gap-1">
+
+            {/* Language dropdown */}
+            <NavDropdown
+              onDark={inverted}
+              trigger={
+                <>
+                  <LangFlag size={14} className="rounded-[1px] shrink-0" />
+                  <span>{locale.toUpperCase()}</span>
+                </>
+              }
+            >
+              {(close) => (
+                <>
+                  {LANGUAGES.map(({ code, label, Flag }) => (
+                    <DropdownItem
+                      key={code}
+                      active={code === locale}
+                      onClick={() => {
+                        close();
+                        if (code !== locale) {
+                          localStorage.setItem("vl-locale", code);
+                          router.push(altHref);
+                        }
+                      }}
+                    >
+                      <Flag size={14} className="rounded-[1px] shrink-0" />
+                      <span className="flex-1">{label}</span>
+                      {code === locale && (
+                        <Check size={12} strokeWidth={2.5} className="text-mulberry-60 shrink-0" aria-hidden="true" />
+                      )}
+                    </DropdownItem>
+                  ))}
+                </>
+              )}
+            </NavDropdown>
+
+            {/* Currency dropdown */}
+            <NavDropdown
+              onDark={inverted}
+              trigger={
+                <>
+                  <CurrencyFlag size={14} className="rounded-[1px] shrink-0" />
+                  <span>{currency}</span>
+                </>
+              }
+            >
+              {(close) => (
+                <>
+                  {CURRENCIES.map(({ code, label, Flag }) => (
+                    <DropdownItem
+                      key={code}
+                      active={code === currency}
+                      onClick={() => { setCurrency(code); close(); }}
+                    >
+                      <Flag size={14} className="rounded-[1px] shrink-0" />
+                      <span className="flex-1">{label}</span>
+                      {code === currency && (
+                        <Check size={12} strokeWidth={2.5} className="text-mulberry-60 shrink-0" aria-hidden="true" />
+                      )}
+                    </DropdownItem>
+                  ))}
+                </>
+              )}
+            </NavDropdown>
 
             <a
               href={AUTH_LINKS.login}
               className={cn(
-                "h-9 px-3 inline-flex items-center text-small font-medium rounded-full",
+                "h-9 px-3 inline-flex items-center text-small font-medium rounded-full ml-0.5",
                 "transition-colors duration-200 ease-soft",
                 inverted
                   ? "text-white/85 hover:text-white hover:bg-white/10"
@@ -173,20 +231,18 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
               {t.login}
             </a>
             <a href={AUTH_LINKS.signup}>
-              <Button
-                variant="primary"
-                size="sm"
-                className="rounded-full px-4"
-              >
+              <Button variant="primary" size="sm" className="rounded-full px-4">
                 {t.cta}
               </Button>
             </a>
           </div>
 
-          {/* Mobile / tablet menu button — covers everything < lg */}
+          {/* Mobile menu button */}
           <button
             type="button"
-            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-label={open
+              ? (locale === "fr" ? "Fermer le menu" : "Close menu")
+              : (locale === "fr" ? "Ouvrir le menu" : "Open menu")}
             aria-expanded={open}
             aria-controls="mobile-nav-drawer"
             onClick={() => setOpen((v) => !v)}
@@ -198,17 +254,12 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
                 : "text-neutral-90 hover:bg-neutral-5"
             )}
           >
-            {open ? (
-              <X size={20} strokeWidth={1.75} />
-            ) : (
-              <Menu size={20} strokeWidth={1.75} />
-            )}
+            {open ? <X size={20} strokeWidth={1.75} /> : <Menu size={20} strokeWidth={1.75} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile / tablet drawer — sits below the pill, full width with
-          a clean white panel since the pill switches to solid when open */}
+      {/* Mobile / tablet drawer */}
       {open && (
         <div
           id="mobile-nav-drawer"
@@ -216,39 +267,56 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
         >
           <div className="rounded-xl bg-white border border-neutral-20 shadow-card overflow-hidden">
             <nav className="px-5 py-4 flex flex-col">
-              <DrawerLink href="/#product" onSelect={() => setOpen(false)}>
-                {t.product}
-              </DrawerLink>
-              <DrawerLink href="/#pricing" onSelect={() => setOpen(false)}>
-                {t.pricing}
-              </DrawerLink>
-              <DrawerLink href="/#manifesto" onSelect={() => setOpen(false)}>
-                {t.manifesto}
-              </DrawerLink>
-              <DrawerLink href="/#security" onSelect={() => setOpen(false)}>
-                {t.security}
-              </DrawerLink>
-              <DrawerLink href="/blog" onSelect={() => setOpen(false)}>
-                {t.blog}
-              </DrawerLink>
-              <div className="mt-4 pt-4 border-t border-neutral-20 flex items-center gap-2">
-                <span className="text-small text-neutral-60">Devise :</span>
-                {CURRENCIES.map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => setCurrency(c)}
-                    className={cn(
-                      "px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide border transition-colors duration-150",
-                      currency === c
-                        ? "bg-neutral-90 text-white border-neutral-90"
-                        : "border-neutral-20 text-neutral-60 hover:text-neutral-90"
-                    )}
-                  >
-                    {c}
-                  </button>
-                ))}
+              <DrawerLink href={lp("/#product")} onSelect={() => setOpen(false)}>{t.product}</DrawerLink>
+              <DrawerLink href={lp("/#pricing")} onSelect={() => setOpen(false)}>{t.pricing}</DrawerLink>
+              <DrawerLink href={lp("/#manifesto")} onSelect={() => setOpen(false)}>{t.manifesto}</DrawerLink>
+              <DrawerLink href={lp("/#security")} onSelect={() => setOpen(false)}>{t.security}</DrawerLink>
+              <DrawerLink href={lp("/blog")} onSelect={() => setOpen(false)}>{t.blog}</DrawerLink>
+
+              {/* Language + currency row */}
+              <div className="mt-4 pt-4 border-t border-neutral-10">
+                <p className="text-[11px] font-medium text-neutral-50 uppercase tracking-wide mb-3">
+                  {locale === "fr" ? "Langue & Devise" : "Language & Currency"}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {LANGUAGES.map(({ code, label, Flag }) => (
+                    <Link
+                      key={code}
+                      href={code === locale ? pathname : altHref}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border transition-colors duration-150",
+                        code === locale
+                          ? "bg-neutral-90 text-white border-neutral-90"
+                          : "border-neutral-20 text-neutral-60 hover:text-neutral-90"
+                      )}
+                    >
+                      <Flag size={13} className="rounded-[1px]" />
+                      {label}
+                    </Link>
+                  ))}
+
+                  <span className="self-center text-neutral-20 text-[11px]">·</span>
+
+                  {CURRENCIES.map(({ code, label, Flag }) => (
+                    <button
+                      key={code}
+                      type="button"
+                      onClick={() => setCurrency(code)}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border transition-colors duration-150",
+                        code === currency
+                          ? "bg-neutral-90 text-white border-neutral-90"
+                          : "border-neutral-20 text-neutral-60 hover:text-neutral-90"
+                      )}
+                    >
+                      <Flag size={13} className="rounded-[1px]" />
+                      {label.split(" — ")[0]}
+                    </button>
+                  ))}
+                </div>
               </div>
+
               <div className="mt-3 flex items-center gap-3">
                 <a
                   href={AUTH_LINKS.login}
@@ -257,16 +325,8 @@ export function Nav({ forceSolid = false }: { forceSolid?: boolean } = {}) {
                 >
                   {t.login}
                 </a>
-                <a
-                  href={AUTH_LINKS.signup}
-                  onClick={() => setOpen(false)}
-                  className="ml-auto"
-                >
-                  <Button
-                    variant="primary"
-                    size="md"
-                    className="rounded-full px-5"
-                  >
+                <a href={AUTH_LINKS.signup} onClick={() => setOpen(false)} className="ml-auto">
+                  <Button variant="primary" size="md" className="rounded-full px-5">
                     {t.cta}
                   </Button>
                 </a>
@@ -293,9 +353,7 @@ function NavLink({
       href={href}
       className={cn(
         "text-small font-medium transition-colors duration-200 ease-soft",
-        inverted
-          ? "text-white/85 hover:text-white"
-          : "text-neutral-80 hover:text-neutral-90"
+        inverted ? "text-white/85 hover:text-white" : "text-neutral-80 hover:text-neutral-90"
       )}
     >
       {children}
@@ -336,12 +394,7 @@ function LeverMark({ inverted }: { inverted: boolean }) {
         inverted ? "text-white" : "text-neutral-90"
       )}
     >
-      <path
-        d="M3 15.5 L19 7"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-      />
+      <path d="M3 15.5 L19 7" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
       <path d="M7 18 L11 12 L15 18 Z" fill="currentColor" />
     </svg>
   );

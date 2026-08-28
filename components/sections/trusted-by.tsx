@@ -10,6 +10,7 @@ import {
   Mail,
 } from "lucide-react";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 
 const PILL_ICONS = {
   key: KeyRound,
@@ -27,7 +28,8 @@ const PILL_ICONS = {
  * section feeling alive without ever being loud.
  */
 export function TrustedBy() {
-  const t = copy.fr.compatibility;
+  const locale = useLocale();
+  const t = copy[locale].compatibility;
   const reduce = useReducedMotion();
 
   return (

@@ -13,6 +13,7 @@ import {
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { copy } from "@/lib/copy";
+import { useLocale, useLocalePath } from "@/components/locale-provider";
 import { AUTH_LINKS } from "@/lib/links";
 import { images, px } from "@/lib/images";
 
@@ -28,8 +29,10 @@ import { images, px } from "@/lib/images";
  *   - Decorative dot grid drifts on a slow loop in the corner.
  */
 export function FinalCta() {
-  const t = copy.fr.finalCta;
-  const microproof = copy.fr.hero.microproof;
+  const locale = useLocale();
+  const lp = useLocalePath();
+  const t = copy[locale].finalCta;
+  const microproof = copy[locale].hero.microproof;
   const bg = images.finalCtaBg;
 
   const ref = React.useRef<HTMLElement | null>(null);
@@ -125,7 +128,7 @@ export function FinalCta() {
                   />
                 </Button>
               </a>
-              <Link href="/contact">
+              <Link href={lp("/contact")}>
                 <Button
                   variant="secondary"
                   size="lg"

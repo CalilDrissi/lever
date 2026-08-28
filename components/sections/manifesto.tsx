@@ -9,6 +9,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 import { images, px } from "@/lib/images";
 import { FranceFlag } from "@/components/icons/france-flag";
 
@@ -18,7 +19,8 @@ import { FranceFlag } from "@/components/icons/france-flag";
  * section breathes without ever drawing attention to the motion itself.
  */
 export function Manifesto() {
-  const t = copy.fr.manifesto;
+  const locale = useLocale();
+  const t = copy[locale].manifesto;
   const img = images.manifesto;
 
   const ref = React.useRef<HTMLDivElement | null>(null);

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Politique de confidentialité — Virtus Lever",
   description:
     "Comment Virtus Lever collecte, utilise et protège tes données personnelles. Hébergement européen, RGPD.",
-  alternates: { canonical: "/confidentialite" },
+  alternates: { canonical: "/fr/privacy" },
 };
 
 const SECTIONS: LegalSection[] = [

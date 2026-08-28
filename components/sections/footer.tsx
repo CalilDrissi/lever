@@ -1,11 +1,22 @@
 "use client";
 
+import * as React from "react";
 import Link from "next/link";
-import { Linkedin, Twitter, Github, Mail, ArrowRight } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Linkedin, Twitter, Github, Mail, ArrowRight, Check } from "lucide-react";
 import { copy } from "@/lib/copy";
+import { useLocale, useLocalePath } from "@/components/locale-provider";
 import { AUTH_LINKS } from "@/lib/links";
 import { FranceFlag } from "@/components/icons/france-flag";
+import { GBFlag } from "@/components/icons/gb-flag";
+import { NavDropdown, DropdownItem } from "@/components/nav-dropdown";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const LANGUAGES = [
+  { code: "en" as const, label: "English",  Flag: GBFlag },
+  { code: "fr" as const, label: "Français", Flag: FranceFlag },
+];
 
 /**
  * Footer — bold edition.
@@ -19,8 +30,23 @@ import { Button } from "@/components/ui/button";
  * Superhuman's `footer_wordmark` pattern.
  */
 export function Footer() {
-  const f = copy.fr.footer;
-  const brand = copy.fr.brand;
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+  const f = copy[locale].footer;
+  const brand = copy[locale].brand;
+
+  const altHref = React.useMemo(() => {
+    if (locale === "fr") {
+      const stripped = pathname.replace(/^\/fr/, "") || "/";
+      return stripped;
+    }
+    return "/fr" + (pathname === "/" ? "" : pathname);
+  }, [locale, pathname]);
+
+  const langEntry = LANGUAGES.find((l) => l.code === locale) ?? LANGUAGES[0];
+  const LangFlag = langEntry.Flag;
+  const lp = useLocalePath();
 
   return (
     <footer className="relative bg-mulberry-100 text-white overflow-hidden">
@@ -28,19 +54,19 @@ export function Footer() {
         {/* Top band */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12">
           <div className="md:col-span-5 lg:col-span-6">
-            <Link href="/" className="inline-flex items-center gap-3 mb-6 sm:mb-8">
+            <Link href={lp("/")} className="inline-flex items-center gap-3 mb-6 sm:mb-8">
               <FooterMark />
               <span className="font-display text-h3 tracking-tight text-white">
                 {brand.name}
               </span>
             </Link>
             <h3 className="font-display text-h2 tracking-tight text-white max-w-[18ch]">
-              Une priorité par jour. Pendant deux semaines. Gratuit.
+              {f.pitch}
             </h3>
             <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
               <a href={AUTH_LINKS.signup}>
                 <Button variant="primary" size="lg" className="group">
-                  Commencer
+                  {f.cta}
                   <ArrowRight
                     size={18}
                     strokeWidth={2}
@@ -50,10 +76,10 @@ export function Footer() {
                 </Button>
               </a>
               <Link
-                href="/contact"
+                href={lp("/contact")}
                 className="text-small text-white/70 hover:text-white underline-offset-4 hover:underline transition-colors duration-200 ease-soft sm:self-center"
               >
-                Parler à l'équipe →
+                {locale === "fr" ? "Parler à l'équipe →" : "Talk to the team →"}
               </Link>
             </div>
           </div>
@@ -69,7 +95,7 @@ export function Footer() {
                   {col.links.map((link) => (
                     <li key={link.label}>
                       <Link
-                        href={link.href}
+                        href={lp(link.href)}
                         className="text-body text-white/70 hover:text-white transition-colors duration-200 ease-soft"
                       >
                         {link.label}
@@ -84,10 +110,48 @@ export function Footer() {
 
         {/* Legal row */}
         <div className="mt-14 sm:mt-20 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p className="text-small text-white/60 inline-flex items-center gap-2">
-            <span>{f.copyright}</span>
-            <FranceFlag size={12} className="rounded-[1px] shrink-0" />
-          </p>
+          <div className="flex flex-wrap items-center gap-4">
+            <p className="text-small text-white/60 inline-flex items-center gap-2">
+              <span>{f.copyright}</span>
+              <FranceFlag size={12} className="rounded-[1px] shrink-0" />
+            </p>
+            {/* Language switcher */}
+            <NavDropdown
+              onDark
+              openUp
+              align="left"
+              trigger={
+                <>
+                  <LangFlag size={13} className="rounded-[1px] shrink-0" />
+                  <span>{locale.toUpperCase()}</span>
+                </>
+              }
+            >
+              {(close) => (
+                <>
+                  {LANGUAGES.map(({ code, label, Flag }) => (
+                    <DropdownItem
+                      key={code}
+                      active={code === locale}
+                      onClick={() => {
+                        close();
+                        if (code !== locale) {
+                          localStorage.setItem("vl-locale", code);
+                          router.push(altHref);
+                        }
+                      }}
+                    >
+                      <Flag size={14} className="rounded-[1px] shrink-0" />
+                      <span className="flex-1">{label}</span>
+                      {code === locale && (
+                        <Check size={12} strokeWidth={2.5} className="text-mulberry-60 shrink-0" aria-hidden="true" />
+                      )}
+                    </DropdownItem>
+                  ))}
+                </>
+              )}
+            </NavDropdown>
+          </div>
           <ul className="flex items-center gap-3">
             <SocialIcon href="https://linkedin.com" label="LinkedIn">
               <Linkedin size={16} strokeWidth={1.75} aria-hidden="true" />

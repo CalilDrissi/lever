@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 import { cn } from "@/lib/utils";
 import { asset } from "@/lib/asset";
 
@@ -24,7 +25,8 @@ import { asset } from "@/lib/asset";
  *   - reduced-motion users get a static centered grid instead.
  */
 export function ProviderMarquee() {
-  const t = copy.fr.providers;
+  const locale = useLocale();
+  const t = copy[locale].providers;
   const reduce = useReducedMotion();
 
   return (

@@ -4,11 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { BlurImage } from "@/components/blur-image";
 import type { Article } from "@/lib/blog";
 
-/** Format an ISO date as e.g. "12 août 2026" (French). */
-export function formatDate(iso: string | null): string {
+/** Format an ISO date, locale-aware. */
+export function formatDate(iso: string | null, locale: "fr" | "en" = "fr"): string {
   if (!iso) return "";
   try {
-    return new Intl.DateTimeFormat("fr-FR", {
+    return new Intl.DateTimeFormat(locale === "fr" ? "fr-FR" : "en-US", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -18,10 +18,21 @@ export function formatDate(iso: string | null): string {
   }
 }
 
-export function PostCard({ post }: { post: Article }) {
+export function PostCard({
+  post,
+  basePath = "/blog",
+  locale = "fr",
+  readLabel,
+}: {
+  post: Article;
+  basePath?: string;
+  locale?: "fr" | "en";
+  readLabel?: string;
+}) {
+  const label = readLabel ?? (locale === "fr" ? "Lire l'article" : "Read the article");
   return (
     <Link
-      href={`/blog/${post.slug}`}
+      href={`${basePath}/${post.slug}`}
       className="group flex flex-col rounded-lg border border-neutral-20 bg-white overflow-hidden transition-shadow duration-200 ease-soft hover:shadow-card"
     >
       {post.coverImageUrl ? (
@@ -44,7 +55,7 @@ export function PostCard({ post }: { post: Article }) {
           {post.tags[0] ? <Badge variant="neutral">{post.tags[0]}</Badge> : null}
           {post.publishedDate ? (
             <span className="text-small text-neutral-60">
-              {formatDate(post.publishedDate)}
+              {formatDate(post.publishedDate, locale)}
             </span>
           ) : null}
         </div>
@@ -58,7 +69,7 @@ export function PostCard({ post }: { post: Article }) {
         ) : null}
 
         <span className="mt-4 pt-4 border-t border-neutral-10 text-small font-medium text-neutral-80 group-hover:text-purple-60 transition-colors duration-200 ease-soft">
-          Lire l'article →
+          {label} →
         </span>
       </div>
     </Link>

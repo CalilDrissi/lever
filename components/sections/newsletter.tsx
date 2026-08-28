@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Mail, ArrowRight, Check } from "lucide-react";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -17,7 +18,8 @@ import { cn } from "@/lib/utils";
  * Form is a stub — submit shows a success state but doesn't send.
  */
 export function Newsletter() {
-  const t = copy.fr.newsletter;
+  const locale = useLocale();
+  const t = copy[locale].newsletter;
   const reduce = useReducedMotion();
   const [email, setEmail] = React.useState("");
   const [submitted, setSubmitted] = React.useState(false);
@@ -94,10 +96,10 @@ export function Newsletter() {
                   </span>
                   <div>
                     <p className="font-display text-h6 tracking-tight text-neutral-90">
-                      Inscription confirmée.
+                      {locale === "fr" ? "Inscription confirmée." : "Subscription confirmed."}
                     </p>
                     <p className="text-small text-neutral-80">
-                      Première lettre dans deux semaines.
+                      {locale === "fr" ? "Première lettre dans deux semaines." : "First letter in two weeks."}
                     </p>
                   </div>
                 </motion.div>

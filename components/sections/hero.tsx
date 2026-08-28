@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { HeroVideo } from "@/components/hero-video";
 import { HeroDecorations } from "@/components/hero-decorations";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 import { AUTH_LINKS } from "@/lib/links";
 
 /**
@@ -29,7 +30,8 @@ import { AUTH_LINKS } from "@/lib/links";
  *     hint at the preview waiting below
  */
 export function Hero() {
-  const t = copy.fr.hero;
+  const locale = useLocale();
+  const t = copy[locale].hero;
   const ref = React.useRef<HTMLElement | null>(null);
   const reduce = useReducedMotion();
 

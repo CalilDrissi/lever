@@ -11,6 +11,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 
 /**
  * Security — inverted card section. Charcoal background, white type.
@@ -27,7 +28,8 @@ const POINT_ICONS = [
 ];
 
 export function Security() {
-  const t = copy.fr.security;
+  const locale = useLocale();
+  const t = copy[locale].security;
 
   return (
     <section id="security" className="relative">

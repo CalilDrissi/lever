@@ -1,0 +1,5 @@
+# Old French-named EN routes → new English-named routes (301)
+/a-propos          /about          301
+/confidentialite   /privacy        301
+/cgu               /terms          301
+/sous-traitants    /subprocessors  301

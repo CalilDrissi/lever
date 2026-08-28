@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 import { InboxDemo } from "@/components/inbox-demo";
 
 /**
@@ -14,7 +15,8 @@ import { InboxDemo } from "@/components/inbox-demo";
  * triage flow without an account.
  */
 export function InboxPreview() {
-  const t = copy.fr.inboxDemo;
+  const locale = useLocale();
+  const t = copy[locale].inboxDemo;
 
   return (
     <section

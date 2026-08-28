@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 import { cn } from "@/lib/utils";
 
 /**
@@ -11,7 +12,8 @@ import { cn } from "@/lib/utils";
  * the open row darkens its title slightly. No heavy chevrons, just plus/minus.
  */
 export function FAQ() {
-  const t = copy.fr.faq;
+  const locale = useLocale();
+  const t = copy[locale].faq;
   const [open, setOpen] = React.useState<number | null>(0);
 
   return (

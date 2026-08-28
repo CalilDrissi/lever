@@ -411,6 +411,8 @@ export const copy = {
     },
     footer: {
       tagline: "Le levier d'Archimède, version inbox.",
+      pitch: "Une priorité par jour. Pendant deux semaines. Gratuit.",
+      cta: "Commencer",
       columns: [
         { heading: "Produit", links: [
           { label: "Fonctionnalités", href: "/#product" },
@@ -421,14 +423,14 @@ export const copy = {
         { heading: "Société", links: [
           { label: "Manifeste", href: "/#manifesto" },
           { label: "Blog",      href: "/blog" },
-          { label: "À propos",  href: "/a-propos" },
+          { label: "À propos",  href: "/about" },
           { label: "Contact",   href: "/contact" },
         ] },
         { heading: "Légal", links: [
-          { label: "Confidentialité", href: "/confidentialite" },
-          { label: "CGU",             href: "/cgu" },
+          { label: "Confidentialité", href: "/privacy" },
+          { label: "CGU",             href: "/terms" },
           { label: "DPA",             href: "/dpa" },
-          { label: "Sous-traitants",  href: "/sous-traitants" },
+          { label: "Sous-traitants",  href: "/subprocessors" },
         ] },
       ],
       copyright: "© 2026 Virtus Lever — Made in France.",
@@ -454,7 +456,7 @@ export const copy = {
         "The Domino algorithm finds the highest-leverage email — you do the rest.",
       ctaPrimary: "Start free — 14 days",
       ctaSecondary: "Watch demo (90s)",
-      microproof: "No credit card · Gmail & Outlook",
+      microproof: "No credit card · Works with every inbox",
     },
     inbox: {
       heading: "Inbox",
@@ -476,6 +478,82 @@ export const copy = {
         { from: "Karim Nadir",       subject: "Brief — homepage", time: "07:58", muted: false },
       ],
     },
+    inboxDemo: {
+      eyebrow: "Interactive demo",
+      title: "Try the triage. No card. No signup.",
+      sub:
+        "Click the actions below: Lever surfaces the handled Domino, " +
+        "promotes the next one, and the counters adjust in real time.",
+      shortcuts: [
+        { keys: ["O"],     label: "Open the Domino" },
+        { keys: ["E"],     label: "Mark as done" },
+        { keys: ["⇧", "S"], label: "Defer to tomorrow" },
+        { keys: ["⌘", "K"], label: "Search everywhere" },
+      ],
+      stats: {
+        backlog: "Backlog",
+        score: "Leverage score",
+        elapsed: "Time spent",
+      },
+      pool: [
+        {
+          id: "atelier-verso",
+          from: "Camille — Atelier Verso",
+          subject: "Signed quote — next steps",
+          preview:
+            "We're locking the scope. If you confirm by Friday, kickoff Monday…",
+          score: 92,
+        },
+        {
+          id: "lea-bernard",
+          from: "Léa Bernard",
+          subject: "Re: Q3 planning — decision needed",
+          preview:
+            "Three options on the table. Your call unblocks two people on the studio side.",
+          score: 88,
+        },
+        {
+          id: "karim-nadir",
+          from: "Karim Nadir",
+          subject: "Brief — homepage v2",
+          preview:
+            "Brief is ready. If you sign off before tomorrow, we hold the delivery date.",
+          score: 81,
+        },
+        {
+          id: "fanny-doc",
+          from: "Fanny Bouvier",
+          subject: "Contract — final review",
+          preview:
+            "Two wording tweaks. Sign-off needed before end of week if OK.",
+          score: 78,
+        },
+      ],
+    },
+    providers: {
+      label: "Connect your inbox in 30 seconds",
+      list: [
+        { name: "Gmail",        file: "/logos/gmail.png"   },
+        { name: "Outlook",      file: "/logos/outlook.png" },
+        { name: "Apple iCloud", file: "/logos/icloud.png"  },
+        { name: "Proton Mail",  file: "/logos/proton.png"  },
+        { name: "HEY",          file: "/logos/hey.png"     },
+        { name: "Zoho Mail",    file: "/logos/zoho.png"    },
+      ],
+    },
+    compatibility: {
+      eyebrow: "Security & compatibility",
+      title: "Works with every inbox.",
+      sub:
+        "Lever isn't tied to any provider. Connect your favourite client " +
+        "read-only — the Domino algorithm does the rest.",
+      pills: [
+        { label: "OAuth standard", icon: "key" },
+        { label: "IMAP & SMTP",    icon: "server" },
+        { label: "Official APIs",  icon: "plug" },
+        { label: "All providers",  icon: "infinity" },
+      ],
+    },
     trustedBy: {
       label: "Used by teams at",
       logos: ["Atelier Verso", "Maison Petit", "Studio Nord", "Ligne Claire", "Champ Libre", "Remue-Méninges"],
@@ -483,18 +561,98 @@ export const copy = {
     pillars: {
       heading: "Four levers, one cockpit.",
       items: [
-        { key: "domino",    eyebrow: "Domino",     title: "One email. The right one. Every day.", body: "", bullet: [] },
-        { key: "triage",    eyebrow: "Triage",     title: "Noise fades. Signal stays.",            body: "", bullet: [] },
-        { key: "followups", eyebrow: "Follow-ups", title: "Nothing slips through.",                body: "", bullet: [] },
-        { key: "analytics", eyebrow: "Analytics",  title: "Measure what matters.",                 body: "", bullet: [] },
+        {
+          key: "domino",
+          eyebrow: "Domino",
+          title: "One email. The right one. Every day.",
+          body:
+            "The Domino algorithm combines Pareto and The One Thing. " +
+            "It ranks your inbox by leverage and surfaces the one email that unblocks the rest.",
+          bullet: ["Score 0–100", "One-sentence rationale", "Learns from your decisions"],
+        },
+        {
+          key: "triage",
+          eyebrow: "Triage",
+          title: "Noise fades. Signal stays.",
+          body:
+            "Newsletters, notifications, pointless CCs: grouped and silenced. " +
+            "You see what needs a decision, not what demands attention.",
+          bullet: ["Auto-grouping", "Natural-language rules", "10-min focus mode"],
+        },
+        {
+          key: "followups",
+          eyebrow: "Follow-ups",
+          title: "Nothing slips through.",
+          body:
+            "Lever tracks unanswered threads, suggests calibrated follow-ups, " +
+            "and reminds you at the right moment — not before.",
+          bullet: ["Pending thread detection", "Generated drafts", "Contextual snooze"],
+        },
+        {
+          key: "analytics",
+          eyebrow: "Analytics",
+          title: "Measure what matters, ignore the rest.",
+          body:
+            "Time spent, backlog, reply rate, resolved threads. " +
+            "A weekly view — not another dashboard.",
+          bullet: ["Backlog vs. capacity", "Peak hours", "4-week trend"],
+        },
+      ],
+    },
+    showcase: {
+      eyebrow: "Who it's for",
+      heading: "For people who decide, not just respond.",
+      sub:
+        "Lever was built for three daily use cases. " +
+        "Same cockpit, different angles.",
+      cards: [
+        {
+          key: "focus",
+          tag: "Solo focus",
+          title: "A 10-minute session, every morning.",
+          body:
+            "Open Lever, see the Domino, decide. " +
+            "The rest waits for the afternoon — or tomorrow.",
+          href: "/blog/the-domino-method",
+        },
+        {
+          key: "desk",
+          tag: "Deep work",
+          title: "Protect your concentration blocks.",
+          body:
+            "Lever mutes newsletters, notifications " +
+            "and pointless CCs. You come back to a readable inbox.",
+          href: "/blog/email-overload",
+        },
+        {
+          key: "team",
+          tag: "Small teams",
+          title: "Shared decisions, no meetings.",
+          body:
+            "Flag a thread as 'waiting on Karim': Lever reminds you " +
+            "at the right time and suggests the follow-up.",
+          href: "/blog/inbox-zero-vs-inbox-one",
+        },
       ],
     },
     how: {
       heading: "How it works.",
       steps: [
-        { n: "01", title: "Connect your inbox.",        body: "Gmail or Outlook. OAuth, encrypted." },
-        { n: "02", title: "Lever reads, ranks, picks.", body: "The Domino algorithm chooses your priority." },
-        { n: "03", title: "You handle it. 10 minutes.", body: "End the day lighter — or don't. Up to you." },
+        {
+          n: "01",
+          title: "Connect your inbox.",
+          body: "Any provider. OAuth, encrypted reads, nothing stored in plain text.",
+        },
+        {
+          n: "02",
+          title: "Lever reads, ranks, picks.",
+          body: "The Domino algorithm scores every email and names your priority for the day.",
+        },
+        {
+          n: "03",
+          title: "You handle it. 10 minutes.",
+          body: "Close the Domino, then the rest — or not. The end of day arrives lighter.",
+        },
       ],
     },
     manifesto: {
@@ -506,25 +664,143 @@ export const copy = {
       eyebrow: "Security",
       title: "Your emails stay yours.",
       body: "OAuth read-only by default. AES-256 at rest, TLS 1.3 in transit. Export or delete everything in one action.",
-      points: ["OAuth Gmail / Microsoft 365", "AES-256 at rest", "TLS 1.3 in transit", "SOC 2 Type II in progress", "EU hosting — Frankfurt", "Hard delete in 24h"],
+      points: [
+        "OAuth standard, all providers",
+        "AES-256 at rest",
+        "TLS 1.3 in transit",
+        "SOC 2 Type II in progress",
+        "EU hosting — Frankfurt",
+        "Hard delete in 24 h",
+      ],
+    },
+    pricing: {
+      eyebrow: "Pricing",
+      title: "Two plans. No surprises.",
+      sub:
+        "14-day trial, no card required. Pick the cadence that suits you — " +
+        "switch or cancel anytime.",
+      monthly: {
+        label: "Monthly",
+        savings: null as string | null,
+      },
+      annual: {
+        label: "Annual",
+        savings: "−17%",
+      },
+      microproof: "No credit card. Cancel in one click.",
+      includes: "What's included:",
+      trust: [
+        "OAuth read-only",
+        "AES-256",
+        "TLS 1.3",
+        "EU hosting",
+      ],
+      plans: [
+        {
+          key: "lever",
+          name: "Lever",
+          tagline: "The full cockpit for your inbox.",
+          featured: true,
+          highlightLabel: "Recommended",
+          monthlyPrice: 18,
+          annualPrice: 15,
+          unit: "€",
+          cadence: "/ month",
+          monthlyNote: "billed monthly",
+          annualNote: "billed €180 / year",
+          cta: "Start trial — 14 days",
+          features: [
+            "Domino algorithm — highest-leverage email, every day",
+            "Auto-triage: newsletters, notifications, CCs silenced",
+            "Calibrated follow-ups and generated drafts",
+            "Weekly analytics — backlog, capacity, resolved threads",
+            "Works with every inbox (OAuth, IMAP, API)",
+            "EN/FR support within 24 h on business days",
+          ],
+        },
+        {
+          key: "enterprise",
+          name: "Enterprise",
+          tagline: "For teams that demand more.",
+          featured: false,
+          highlightLabel: null,
+          customLabel: "Custom pricing",
+          customSub: "from €12 / month / seat",
+          cta: "Talk to the team",
+          features: [
+            "Everything in Lever",
+            "SSO / SAML, SCIM provisioning",
+            "Audit logs and retention policies",
+            "Dedicated hosting, region of choice",
+            "Priority 24/7 support",
+            "DPA, SLA and custom contracts",
+          ],
+        },
+      ],
     },
     faq: {
       heading: "FAQ.",
       items: [
-        { q: "How does the Domino algorithm choose?", a: "It crosses three signals: who's writing, what you usually do with this kind of email, and downstream impact." },
-        { q: "What if I don't have time today?",       a: "The Domino rolls forward. Lever doesn't shame you. It picks up tomorrow." },
-        { q: "Does Lever read my emails?",             a: "It analyzes what's needed for scoring. Nothing trains an external model." },
-        { q: "Compatible with Superhuman, Hey, Spark?", a: "Lever sits over Gmail and Outlook. Keep your client, let Lever triage." },
-        { q: "How much?",                                a: "14-day trial, then €18/month (€15 annual). One plan, everything included." },
+        { q: "How does the Domino algorithm choose?", a: "It crosses three signals: who's writing (relational weight), what you usually do with this kind of email (pattern), and the cascade effect — how many other threads depend on this reply." },
+        { q: "What if I don't have time today?",       a: "The Domino rolls forward. Lever doesn't shame you. It shows you where you stand and picks up tomorrow." },
+        { q: "Does Lever read my emails?",             a: "Lever analyses the metadata and content needed for scoring, locally when possible. No email is used to train an external model." },
+        { q: "Compatible with Superhuman, Hey, Spark?", a: "Lever sits over your email client — whichever it is. Keep your favourite client and use Lever for triage." },
+        { q: "How much does it cost?",                  a: "Free to try, then Founding at €7/month (launch offer · 200 seats), Pro at €12/month, Power at €19/month. Annual available on Pro and Power. Team/Enterprise on request." },
+      ],
+    },
+    resources: {
+      eyebrow: "Resources",
+      title: "Productivity, clearly explained.",
+      sub: "Three methods that inspire Lever — explained in a few minutes.",
+      videos: [
+        {
+          id: "ZxWjNJSXpi4",
+          topic: "Prioritise",
+          title: "The Eisenhower Matrix",
+          blurb: "Urgent or important? Sort your tasks along the two axes that count.",
+        },
+        {
+          id: "gvLiTG3Webg",
+          topic: "Focus effort",
+          title: "The Pareto Principle (80/20)",
+          blurb: "20% of your actions produce 80% of results. The core of leverage.",
+        },
+        {
+          id: "zsf0nDtH0UU",
+          topic: "One thing",
+          title: "The One Thing",
+          blurb: "The domino task: the one that, once done, makes everything else easier.",
+        },
       ],
     },
     finalCta: {
+      eyebrow: "Free trial · 14 days",
       title: "One priority a day. For two weeks. Free.",
-      sub: "You'll feel the difference before the week ends.",
+      sub:
+        "No credit card. No onboarding tunnel. " +
+        "Connect your inbox, and the afternoon that follows feels longer.",
       cta: "Start now",
+      ctaSecondary: "Talk to the team",
+      stats: [
+        { value: "10", unit: "min/day", label: "of triage" },
+        { value: "−30", unit: "%", label: "backlog in 2 weeks" },
+        { value: "92", unit: "/100", label: "average leverage score" },
+      ],
+    },
+    newsletter: {
+      eyebrow: "Lever Letter",
+      title: "One letter a month. No notifications.",
+      sub:
+        "Tools, ideas and experiments for a calmer inbox. " +
+        "Unsubscribe in one click — trust matters more than list size.",
+      placeholder: "your@email.com",
+      cta: "Subscribe",
+      microproof: "1,200 readers · zero spam · never sold",
     },
     footer: {
       tagline: "Archimedes' lever, inbox edition.",
+      pitch: "One clear priority a day. Two weeks free.",
+      cta: "Get started",
       columns: [
         { heading: "Product", links: [
           { label: "Features",  href: "/#product" },
@@ -535,14 +811,14 @@ export const copy = {
         { heading: "Company", links: [
           { label: "Manifesto", href: "/#manifesto" },
           { label: "Blog",      href: "/blog" },
-          { label: "About",     href: "/a-propos" },
+          { label: "About",     href: "/about" },
           { label: "Contact",   href: "/contact" },
         ] },
         { heading: "Legal", links: [
-          { label: "Privacy",       href: "/confidentialite" },
-          { label: "Terms",         href: "/cgu" },
+          { label: "Privacy",       href: "/privacy" },
+          { label: "Terms",         href: "/terms" },
           { label: "DPA",           href: "/dpa" },
-          { label: "Subprocessors", href: "/sous-traitants" },
+          { label: "Subprocessors", href: "/subprocessors" },
         ] },
       ],
       copyright: "© 2026 Virtus Lever — built in Paris, quietly.",

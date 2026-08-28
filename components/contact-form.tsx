@@ -4,6 +4,7 @@ import * as React from "react";
 import { Input, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 import { cn } from "@/lib/utils";
 
 /**
@@ -13,6 +14,7 @@ import { cn } from "@/lib/utils";
  * pre-filled mailto so the form never dead-ends.
  */
 export function ContactForm() {
+  const locale = useLocale();
   const domain = copy.fr.brand.domain;
   const to = `hello@${domain}`;
   const [status, setStatus] = React.useState<
@@ -53,7 +55,7 @@ export function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="space-y-2">
-          <Label htmlFor="name">Nom</Label>
+          <Label htmlFor="name">{locale === "fr" ? "Nom" : "Name"}</Label>
           <Input id="name" name="name" autoComplete="name" required placeholder="Camille Durand" />
         </div>
         <div className="space-y-2">
@@ -76,7 +78,7 @@ export function ContactForm() {
           name="message"
           required
           rows={6}
-          placeholder="Dis-nous en quelques lignes ce dont tu as besoin…"
+          placeholder={locale === "fr" ? "Dis-nous en quelques lignes ce dont tu as besoin…" : "Tell us briefly what you need…"}
           className="w-full rounded-sm bg-neutral-5 border border-neutral-20 px-3 py-2.5 text-body text-neutral-90 placeholder:text-neutral-60 transition-[border-color,box-shadow] duration-200 ease-soft hover:border-neutral-30 focus:outline-none focus:border-purple-60 focus:shadow-focus"
         />
       </div>
@@ -89,7 +91,9 @@ export function ContactForm() {
           className="rounded"
           disabled={status === "submitting"}
         >
-          {status === "submitting" ? "Envoi…" : "Envoyer"}
+          {status === "submitting"
+            ? (locale === "fr" ? "Envoi…" : "Sending…")
+            : (locale === "fr" ? "Envoyer" : "Send")}
         </Button>
         <p
           className={cn(
@@ -99,10 +103,14 @@ export function ContactForm() {
           role="status"
         >
           {status === "sent"
-            ? "Merci ! Ton message est bien parti — on te répond vite."
+            ? (locale === "fr"
+                ? "Merci ! Ton message est bien parti — on te répond vite."
+                : "Thank you! Your message is on its way — we'll reply soon.")
             : status === "error"
-            ? "Ton client mail s'ouvre en secours — envoie-nous le message directement."
-            : "Réponse sous un jour ouvré."}
+            ? (locale === "fr"
+                ? "Ton client mail s'ouvre en secours — envoie-nous le message directement."
+                : "Your mail client is opening as a fallback — send us the message directly.")
+            : (locale === "fr" ? "Réponse sous un jour ouvré." : "Reply within one business day.")}
         </p>
       </div>
     </form>

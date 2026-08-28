@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Target, Filter, BellRing, BarChart3, Check } from "lucide-react";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   DominoIllustration,
@@ -31,7 +32,8 @@ const ILLUSTRATIONS = {
  * copy below stays compact. Cards lift on hover.
  */
 export function Pillars() {
-  const t = copy.fr.pillars;
+  const locale = useLocale();
+  const t = copy[locale].pillars;
   const reduce = useReducedMotion();
 
   return (

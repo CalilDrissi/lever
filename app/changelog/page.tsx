@@ -5,14 +5,14 @@ import { Badge } from "@/components/ui/badge";
 export const metadata: Metadata = {
   title: "Changelog — Virtus Lever",
   description:
-    "Les nouveautés de Virtus Lever, version après version. Ce qu'on a expédié, sans bruit.",
+    "What's new in Virtus Lever, version by version. What we've shipped, without the noise.",
   alternates: { canonical: "/changelog" },
 };
 
 type Entry = {
   version: string;
   date: string;
-  tag: "Nouveau" | "Amélioré" | "Corrigé";
+  tag: "New" | "Improved" | "Fixed";
   title: string;
   items: string[];
 };
@@ -20,51 +20,51 @@ type Entry = {
 const ENTRIES: Entry[] = [
   {
     version: "0.4",
-    date: "Août 2026",
-    tag: "Nouveau",
-    title: "Score de levier explicable",
+    date: "August 2026",
+    tag: "New",
+    title: "Explainable leverage score",
     items: [
-      "Chaque Domino affiche les trois signaux qui l'ont fait remonter.",
-      "Nouveau raccourci clavier pour reporter au lendemain.",
-      "Export CSV de ton historique de priorités.",
+      "Each Domino now shows the three signals that pushed it to the top.",
+      "New keyboard shortcut to defer to tomorrow.",
+      "CSV export of your priority history.",
     ],
   },
   {
     version: "0.3",
-    date: "Juillet 2026",
-    tag: "Amélioré",
-    title: "Triage plus rapide",
+    date: "July 2026",
+    tag: "Improved",
+    title: "Faster triage",
     items: [
-      "Le classement se recalcule en tâche de fond, sans recharger la boîte.",
-      "Marque comme lu / archivé directement depuis le cockpit.",
+      "Ranking recalculates in the background without reloading the inbox.",
+      "Mark as read / archive directly from the cockpit.",
     ],
   },
   {
     version: "0.2",
-    date: "Juin 2026",
-    tag: "Corrigé",
-    title: "Fiabilité des relances",
+    date: "June 2026",
+    tag: "Fixed",
+    title: "Follow-up reliability",
     items: [
-      "Les relances programmées ne se dédoublent plus après une reconnexion.",
-      "Meilleure gestion des fuseaux horaires sur les envois différés.",
+      "Scheduled follow-ups no longer duplicate after reconnection.",
+      "Better timezone handling for deferred sends.",
     ],
   },
   {
     version: "0.1",
-    date: "Mai 2026",
-    tag: "Nouveau",
-    title: "Première bêta privée",
+    date: "May 2026",
+    tag: "New",
+    title: "First private beta",
     items: [
-      "Connexion Gmail & Outlook en OAuth lecture seule.",
-      "Algorithme Domino : une priorité par jour.",
+      "Gmail & Outlook connection via read-only OAuth.",
+      "Domino algorithm: one priority per day.",
     ],
   },
 ];
 
 const TAG_VARIANT = {
-  Nouveau: "accent",
-  Amélioré: "score",
-  Corrigé: "neutral",
+  New: "accent",
+  Improved: "score",
+  Fixed: "neutral",
 } as const;
 
 export default function ChangelogPage() {
@@ -72,8 +72,8 @@ export default function ChangelogPage() {
     <PageShell>
       <PageHeader
         eyebrow="Changelog"
-        title="Ce qu'on a expédié."
-        lead="Les nouveautés, version après version. On avance par petits pas solides, sans annonce tapageuse."
+        title="What we've shipped."
+        lead="Updates, version by version. We move in small, solid steps — no noisy announcements."
       />
 
       <Section>

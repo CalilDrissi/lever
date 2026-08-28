@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Conditions générales d'utilisation — Virtus Lever",
   description:
     "Les conditions générales d'utilisation du service Virtus Lever.",
-  alternates: { canonical: "/cgu" },
+  alternates: { canonical: "/fr/terms" },
 };
 
 const SECTIONS: LegalSection[] = [

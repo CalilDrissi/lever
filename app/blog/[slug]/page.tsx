@@ -18,13 +18,12 @@ import {
   tagToSlug,
 } from "@/lib/blog";
 
-// Export mode: only the slugs enumerated here are built; nothing on-demand.
 export const dynamicParams = false;
 
-const PLACEHOLDER_SLUG = "a-venir";
+const PLACEHOLDER_SLUG = "coming-soon";
 
 export async function generateStaticParams() {
-  const posts = await getAllArticles();
+  const posts = await getAllArticles("en");
   if (posts.length === 0) return [{ slug: PLACEHOLDER_SLUG }];
   return posts.map((p) => ({ slug: p.slug }));
 }
@@ -34,7 +33,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const post = await getArticleBySlug(params.slug);
+  const post = await getArticleBySlug(params.slug, "en");
   if (!post) return { title: "Article — Virtus Lever" };
   return {
     title: `${post.title} — Virtus Lever`,
@@ -56,15 +55,15 @@ export default async function BlogPostPage({
 }: {
   params: { slug: string };
 }) {
-  const post = await getArticleBySlug(params.slug);
+  const post = await getArticleBySlug(params.slug, "en");
 
   if (!post) {
     return (
       <PageShell>
         <PageHeader
           eyebrow="Blog"
-          title="Cet article arrive bientôt."
-          lead="Le premier contenu est en préparation."
+          title="This article is coming soon."
+          lead="The first content is in preparation."
         />
         <Section>
           <Link
@@ -72,7 +71,7 @@ export default async function BlogPostPage({
             className="inline-flex items-center gap-1.5 text-small font-medium text-neutral-80 hover:text-purple-60 transition-colors duration-200 ease-soft"
           >
             <ArrowLeft size={15} strokeWidth={2} aria-hidden="true" />
-            Retour au blog
+            Back to blog
           </Link>
         </Section>
       </PageShell>
@@ -80,7 +79,7 @@ export default async function BlogPostPage({
   }
 
   const [related, headings] = await Promise.all([
-    getRelatedForArticle(post, 3),
+    getRelatedForArticle(post, 3, "en"),
     Promise.resolve(articleHeadings(post)),
   ]);
   const plainText = articlePlainText(post);
@@ -89,7 +88,6 @@ export default async function BlogPostPage({
     <PageShell>
       <ReadingProgress targetId="post-article" />
       <article id="post-article">
-        {/* Header — centered column */}
         <header className="border-b border-neutral-20 bg-neutral-5">
           <div className="container pt-32 pb-12 sm:pt-36">
             <div className={COLUMN}>
@@ -98,7 +96,7 @@ export default async function BlogPostPage({
                 className="inline-flex items-center gap-1.5 text-small font-medium text-neutral-80 hover:text-purple-60 transition-colors duration-200 ease-soft"
               >
                 <ArrowLeft size={15} strokeWidth={2} aria-hidden="true" />
-                Tous les articles
+                All articles
               </Link>
 
               <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -119,10 +117,10 @@ export default async function BlogPostPage({
                 {post.author ? <span>{post.author}</span> : null}
                 {post.author && post.publishedDate ? <span aria-hidden="true">·</span> : null}
                 {post.publishedDate ? (
-                  <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>
+                  <time dateTime={post.publishedDate}>{formatDate(post.publishedDate, "en")}</time>
                 ) : null}
                 <span aria-hidden="true">·</span>
-                <span>{post.readingMinutes} min de lecture</span>
+                <span>{post.readingMinutes} min read</span>
               </div>
 
               <div className="mt-7">
@@ -132,7 +130,6 @@ export default async function BlogPostPage({
           </div>
         </header>
 
-        {/* Cover — centered, slightly wider than the text column */}
         {post.coverImageUrl ? (
           <div className="container pt-10">
             <BlurImage
@@ -144,7 +141,6 @@ export default async function BlogPostPage({
           </div>
         ) : null}
 
-        {/* Body — centered column, sticky TOC rail on wide screens */}
         <div id="post-body" className="container py-12 sm:py-14">
           <ArticleToc headings={headings} boundsId="post-body" />
           <div className={COLUMN}>
@@ -156,22 +152,21 @@ export default async function BlogPostPage({
                 className="inline-flex items-center gap-1.5 text-small font-medium text-neutral-80 hover:text-purple-60 transition-colors duration-200 ease-soft"
               >
                 <ArrowLeft size={15} strokeWidth={2} aria-hidden="true" />
-                Retour au blog
+                Back to blog
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Related */}
         {related.length > 0 ? (
           <section className="border-t border-neutral-20 bg-neutral-5">
             <div className="container py-14 sm:py-16">
               <h2 className="font-display text-h4 tracking-tight text-neutral-90 mb-8">
-                À lire ensuite
+                Read next
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {related.map((r) => (
-                  <PostCard key={r.slug} post={r} />
+                  <PostCard key={r.slug} post={r} locale="en" />
                 ))}
               </div>
             </div>

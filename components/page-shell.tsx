@@ -90,20 +90,29 @@ export function LegalDoc({
   updated,
   intro,
   sections,
+  locale = "fr",
 }: {
-  updated: string;
+  updated?: string;
   intro?: string;
   sections: LegalSection[];
+  locale?: "fr" | "en";
 }) {
+  const updatedLabel = locale === "en" ? "Last updated" : "Dernière mise à jour";
+  const disclaimer =
+    locale === "en"
+      ? "Template document provided for guidance — to be reviewed by legal counsel before any real production use."
+      : "Modèle de document fourni à titre indicatif — à faire relire par un conseil juridique avant toute mise en production réelle.";
+
   return (
     <Section>
       <div className="measure">
-        <p className="text-small text-neutral-60">Dernière mise à jour · {updated}</p>
+        {updated && (
+          <p className="text-small text-neutral-60">{updatedLabel} · {updated}</p>
+        )}
 
         <div className="mt-4 rounded-sm border border-neutral-20 bg-neutral-10 px-4 py-3">
           <p className="text-small text-neutral-80">
-            Modèle de document fourni à titre indicatif — à faire relire par un
-            conseil juridique avant toute mise en production réelle.
+            {disclaimer}
           </p>
         </div>
 
@@ -143,12 +152,12 @@ export function LegalDoc({
 
         <div className="mt-14 pt-6 border-t border-neutral-20">
           <p className="text-small text-neutral-60">
-            Une question sur ce document ?{" "}
+            {locale === "en" ? "A question about this document? " : "Une question sur ce document ? "}
             <Link
-              href="/contact"
+              href={locale === "en" ? "/contact" : "/fr/contact"}
               className="text-neutral-90 underline underline-offset-4 hover:text-purple-60"
             >
-              Contacte-nous
+              {locale === "en" ? "Contact us" : "Contacte-nous"}
             </Link>
             .
           </p>

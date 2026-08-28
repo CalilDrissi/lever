@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Play, ArrowUpRight, X } from "lucide-react";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -20,10 +21,11 @@ type Video = {
  * opens a modal lightbox that mounts the YouTube <iframe> and autoplays —
  * so YouTube's scripts/cookies only load once the visitor chooses to watch,
  * and the homepage stays fast. The video list lives in lib/copy.ts
- * (copy.fr.resources.videos) so it's easy to edit or swap.
+ * (copy[locale].resources.videos) so it's easy to edit or swap.
  */
 export function Resources() {
-  const t = copy.fr.resources;
+  const locale = useLocale();
+  const t = copy[locale].resources;
   const [active, setActive] = React.useState<Video | null>(null);
 
   return (
@@ -39,19 +41,19 @@ export function Resources() {
 
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           {t.videos.map((v) => (
-            <VideoCard key={v.id} video={v} onOpen={() => setActive(v)} />
+            <VideoCard key={v.id} video={v} onOpen={() => setActive(v)} locale={locale} />
           ))}
         </div>
       </div>
 
       {active ? (
-        <VideoModal video={active} onClose={() => setActive(null)} />
+        <VideoModal video={active} onClose={() => setActive(null)} locale={locale} />
       ) : null}
     </section>
   );
 }
 
-function VideoCard({ video, onOpen }: { video: Video; onOpen: () => void }) {
+function VideoCard({ video, onOpen, locale }: { video: Video; onOpen: () => void; locale: import("@/lib/copy").Locale }) {
   const { id, topic, title, blurb } = video;
 
   return (
@@ -60,7 +62,7 @@ function VideoCard({ video, onOpen }: { video: Video; onOpen: () => void }) {
       <button
         type="button"
         onClick={onOpen}
-        aria-label={`Lire la vidéo : ${title}`}
+        aria-label={locale === "fr" ? `Lire la vidéo : ${title}` : `Play video: ${title}`}
         className="relative aspect-video overflow-hidden rounded-lg border border-neutral-20 bg-neutral-10 focus-visible:outline-none focus-visible:shadow-focus"
       >
         {/* Thumbnail (plain <img> — no next/image, works on the static export) */}
@@ -101,7 +103,7 @@ function VideoCard({ video, onOpen }: { video: Video; onOpen: () => void }) {
           rel="noopener noreferrer"
           className="mt-3 inline-flex items-center gap-1 text-small font-medium text-neutral-80 hover:text-purple-60 transition-colors duration-200 ease-soft"
         >
-          Regarder sur YouTube
+          {locale === "fr" ? "Regarder sur YouTube" : "Watch on YouTube"}
           <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
         </a>
       </div>
@@ -113,7 +115,7 @@ function VideoCard({ video, onOpen }: { video: Video; onOpen: () => void }) {
  * VideoModal — full-screen lightbox for a single video. Closes on backdrop
  * click, the × button, or Escape. Locks body scroll while open.
  */
-function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
+function VideoModal({ video, onClose, locale }: { video: Video; onClose: () => void; locale: import("@/lib/copy").Locale }) {
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -141,7 +143,7 @@ function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
         <button
           type="button"
           onClick={onClose}
-          aria-label="Fermer"
+          aria-label={locale === "fr" ? "Fermer" : "Close"}
           className="absolute -top-11 right-0 grid place-items-center size-9 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors duration-200 ease-soft focus-visible:outline-none focus-visible:shadow-focus"
         >
           <X size={20} strokeWidth={1.75} />

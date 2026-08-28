@@ -9,6 +9,7 @@ import {
 import { Check, Clock, Inbox, Keyboard, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 import { cn } from "@/lib/utils";
 
 /**
@@ -32,15 +33,23 @@ import { cn } from "@/lib/utils";
 type Action = "done" | "deferred" | "open";
 
 const POOL_SIZE_BACKLOG_INIT = 12;
-const ACTION_LABELS: Record<Action, string> = {
+const ACTION_LABELS_FR: Record<Action, string> = {
   open: "Ouvert",
   deferred: "Reporté",
   done: "Traité",
 };
 
+const ACTION_LABELS_EN: Record<Action, string> = {
+  open: "Open",
+  deferred: "Deferred",
+  done: "Done",
+};
+
 export function InboxDemo() {
-  const t = copy.fr.inboxDemo;
-  const inbox = copy.fr.inbox;
+  const locale = useLocale();
+  const t = copy[locale].inboxDemo;
+  const inbox = copy[locale].inbox;
+  const actionLabels = locale === "fr" ? ACTION_LABELS_FR : ACTION_LABELS_EN;
   const reduce = useReducedMotion();
 
   const [cursor, setCursor] = React.useState(0);
@@ -114,7 +123,7 @@ export function InboxDemo() {
               aria-hidden="true"
             />
             <span className="text-eyebrow uppercase text-neutral-60">
-              Raccourcis
+              {locale === "fr" ? "Raccourcis" : "Shortcuts"}
             </span>
           </div>
           <ul className="space-y-3">
@@ -148,7 +157,7 @@ export function InboxDemo() {
             "shadow-card overflow-hidden"
           )}
           role="application"
-          aria-label="Démo interactive de la boîte Lever"
+          aria-label={locale === "fr" ? "Démo interactive de la boîte Lever" : "Interactive Lever inbox demo"}
         >
           {/* Window chrome */}
           <div className="flex items-center gap-1.5 px-4 h-9 border-b border-neutral-20 bg-neutral-10">
@@ -305,12 +314,12 @@ export function InboxDemo() {
           {/* Recent action tape */}
           <div>
             <span className="text-eyebrow uppercase text-neutral-60 block mb-2">
-              Dernières actions
+              {locale === "fr" ? "Dernières actions" : "Recent actions"}
             </span>
             <ul className="flex flex-wrap gap-1.5 min-h-[28px]">
               {history.length === 0 ? (
                 <li className="text-small text-neutral-60 italic">
-                  Aucune. Vas-y.
+                  {locale === "fr" ? "Aucune. Vas-y." : "None yet. Go ahead."}
                 </li>
               ) : (
                 history
@@ -329,7 +338,7 @@ export function InboxDemo() {
                           "bg-purple-60 text-white border border-purple-60"
                       )}
                     >
-                      {ACTION_LABELS[a]}
+                      {actionLabels[a]}
                     </li>
                   ))
               )}

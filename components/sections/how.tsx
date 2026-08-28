@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Plug, Sparkles, CheckCircle2 } from "lucide-react";
 import { copy } from "@/lib/copy";
+import { useLocale } from "@/components/locale-provider";
 
 const STEP_ICONS = [Plug, Sparkles, CheckCircle2];
 
@@ -11,7 +12,8 @@ const STEP_ICONS = [Plug, Sparkles, CheckCircle2];
  * The big numerals carry the visual weight; lucide icons sit beside them.
  */
 export function How() {
-  const t = copy.fr.how;
+  const locale = useLocale();
+  const t = copy[locale].how;
 
   return (
     <section className="relative bg-neutral-5 border-y border-neutral-20">
