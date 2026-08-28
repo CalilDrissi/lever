@@ -353,7 +353,7 @@ export const copy = {
         {
           q: "Combien ça coûte ?",
           a:
-            "Essai 14 jours, puis 18 € / mois. Annuel à 15 € / mois. Une seule offre, tout inclus.",
+            "Free pour tester, puis Founding à 7 € / mois (offre de lancement · 200 places), Pro à 12 € / mois, Power à 19 € / mois. Annuel disponible sur Pro et Power. Team/Enterprise sur devis.",
         },
       ],
     },
