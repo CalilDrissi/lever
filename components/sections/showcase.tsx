@@ -3,6 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { copy } from "@/lib/copy";
 import { images, px } from "@/lib/images";
@@ -58,6 +59,7 @@ export function Showcase() {
               tag={card.tag}
               title={card.title}
               body={card.body}
+              href={card.href}
               imageKey={card.key as keyof typeof KEY_TO_IMG}
               index={i}
             />
@@ -72,12 +74,14 @@ function ShowcaseCard({
   tag,
   title,
   body,
+  href,
   imageKey,
   index,
 }: {
   tag: string;
   title: string;
   body: string;
+  href: string;
   imageKey: keyof typeof KEY_TO_IMG;
   index: number;
 }) {
@@ -101,6 +105,7 @@ function ShowcaseCard({
         "hover:border-neutral-30 hover:shadow-card"
       )}
     >
+    <Link href={href} className="block h-full">
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden bg-neutral-10">
         <Image
@@ -129,7 +134,7 @@ function ShowcaseCard({
           {title}
         </h3>
         <p className="mt-3 text-body text-neutral-80 max-w-[36ch]">{body}</p>
-        <span className="mt-5 inline-flex items-center gap-1.5 text-small text-neutral-80 group-hover:text-neutral-90 transition-colors duration-200 ease-soft">
+        <span className="mt-5 inline-flex items-center gap-1.5 text-small text-neutral-80 group-hover:text-purple-60 transition-colors duration-200 ease-soft">
           En savoir plus
           <ArrowUpRight
             size={14}
@@ -139,6 +144,7 @@ function ShowcaseCard({
           />
         </span>
       </div>
+    </Link>
     </motion.article>
   );
 }

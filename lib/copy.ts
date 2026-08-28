@@ -195,6 +195,7 @@ export const copy = {
           body:
             "Tu ouvres Lever, tu vois le Domino, tu décides. " +
             "Le reste attendra l'après-midi — ou demain.",
+          href: "/blog/rituel-matin-inbox",
         },
         {
           key: "desk",
@@ -203,6 +204,7 @@ export const copy = {
           body:
             "Lever met en sourdine les newsletters, les notifications " +
             "et les CC inutiles. Tu reviens à un inbox lisible.",
+          href: "/blog/deep-work",
         },
         {
           key: "team",
@@ -211,6 +213,7 @@ export const copy = {
           body:
             "Marque un fil comme « en attente de Karim » : Lever te rappelle " +
             "au bon moment, et propose la relance.",
+          href: "/blog/communication-asynchrone",
         },
       ],
     },
