@@ -125,33 +125,39 @@ function sortByDateDesc(a: Article, b: Article) {
   return (b.publishedDate || "").localeCompare(a.publishedDate || "");
 }
 
-/** All articles (Contentful overrides seed on slug collision), newest first. */
-export async function getAllArticles(): Promise<Article[]> {
-  const cf = (await cfGetAll()).map(contentfulToArticle);
+/**
+ * All articles for a locale — Contentful overrides seed on slug collision.
+ * Seed posts are French-only. EN locale returns Contentful-only.
+ */
+export async function getAllArticles(locale: "en" | "fr" = "fr"): Promise<Article[]> {
+  const cf = (await cfGetAll(locale)).map(contentfulToArticle);
+  if (locale === "en") return cf.sort(sortByDateDesc);
+  // FR: seed posts as base, Contentful overrides
   const bySlug = new Map<string, Article>();
   for (const a of SEED_ARTICLES) bySlug.set(a.slug, a);
-  for (const a of cf) bySlug.set(a.slug, a); // Contentful wins
+  for (const a of cf) bySlug.set(a.slug, a);
   return [...bySlug.values()].sort(sortByDateDesc);
 }
 
-/** A single article by slug — Contentful first, then seed. */
-export async function getArticleBySlug(slug: string): Promise<Article | null> {
-  const cf = await cfGetBySlug(slug);
+/** A single article by slug and locale — Contentful first, then seed (FR only). */
+export async function getArticleBySlug(slug: string, locale: "en" | "fr" = "fr"): Promise<Article | null> {
+  const cf = await cfGetBySlug(slug, locale);
   if (cf) return contentfulToArticle(cf);
-  return SEED_ARTICLES.find((a) => a.slug === slug) ?? null;
+  if (locale === "fr") return SEED_ARTICLES.find((a) => a.slug === slug) ?? null;
+  return null;
 }
 
-/** All tags across every article, alphabetical. */
-export async function getAllArticleTags(): Promise<string[]> {
-  const posts = await getAllArticles();
+/** All tags across every article for a locale, alphabetical. */
+export async function getAllArticleTags(locale: "en" | "fr" = "fr"): Promise<string[]> {
+  const posts = await getAllArticles(locale);
   const set = new Set<string>();
   posts.forEach((p) => p.tags.forEach((t) => set.add(t)));
-  return [...set].sort((a, b) => a.localeCompare(b, "fr"));
+  return [...set].sort((a, b) => a.localeCompare(b, locale));
 }
 
-/** Articles carrying a given tag, newest first. */
-export async function getArticlesByTag(tag: string): Promise<Article[]> {
-  const posts = await getAllArticles();
+/** Articles carrying a given tag for a locale, newest first. */
+export async function getArticlesByTag(tag: string, locale: "en" | "fr" = "fr"): Promise<Article[]> {
+  const posts = await getAllArticles(locale);
   return posts.filter((p) => p.tags.includes(tag));
 }
 
@@ -173,9 +179,10 @@ export async function getRelatedArticles(slugs: string[]): Promise<Article[]> {
  */
 export async function getRelatedForArticle(
   article: Article,
-  limit = 3
+  limit = 3,
+  locale: "en" | "fr" = "fr"
 ): Promise<Article[]> {
-  const all = await getAllArticles();
+  const all = await getAllArticles(locale);
   const others = all.filter((a) => a.slug !== article.slug);
 
   const result: Article[] = [];

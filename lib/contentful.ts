@@ -42,6 +42,7 @@ export type BlogPostSkeleton = EntrySkeletonType<
     tags: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
     publishedDate: EntryFieldTypes.Date;
     author: EntryFieldTypes.Symbol;
+    locale: EntryFieldTypes.Symbol;
   },
   typeof BLOG_POST_TYPE
 >;
@@ -96,14 +97,14 @@ function toPost(entry: Entry<BlogPostSkeleton>): BlogPost {
   };
 }
 
-/** All posts, newest first. Returns [] when unconfigured or on any API error
- *  (e.g. the content type doesn't exist yet). */
-export async function getAllPosts(): Promise<BlogPost[]> {
+/** All posts for a locale, newest first. Returns [] when unconfigured or on error. */
+export async function getAllPosts(locale: "en" | "fr" = "fr"): Promise<BlogPost[]> {
   const client = getClient();
   if (!client) return [];
   try {
     const res = await client.getEntries<BlogPostSkeleton>({
       content_type: BLOG_POST_TYPE,
+      "fields.locale": locale,
       order: ["-fields.publishedDate"],
       include: 2,
       limit: 1000,
@@ -115,14 +116,15 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   }
 }
 
-/** A single post by slug, or null if not found / not configured / on error. */
-export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
+/** A single post by slug and locale, or null if not found. */
+export async function getPostBySlug(slug: string, locale: "en" | "fr" = "fr"): Promise<BlogPost | null> {
   const client = getClient();
   if (!client) return null;
   try {
     const res = await client.getEntries<BlogPostSkeleton>({
       content_type: BLOG_POST_TYPE,
       "fields.slug": slug,
+      "fields.locale": locale,
       include: 2,
       limit: 1,
     });
@@ -134,17 +136,17 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   }
 }
 
-/** The unique set of tags across all posts, alphabetically sorted. */
-export async function getAllTags(): Promise<string[]> {
-  const posts = await getAllPosts();
+/** The unique set of tags across all posts for a locale, alphabetically sorted. */
+export async function getAllTags(locale: "en" | "fr" = "fr"): Promise<string[]> {
+  const posts = await getAllPosts(locale);
   const set = new Set<string>();
   posts.forEach((p) => p.tags.forEach((t) => set.add(t)));
-  return [...set].sort((a, b) => a.localeCompare(b, "fr"));
+  return [...set].sort((a, b) => a.localeCompare(b, locale));
 }
 
-/** Posts filtered to a given tag, newest first. */
-export async function getPostsByTag(tag: string): Promise<BlogPost[]> {
-  const posts = await getAllPosts();
+/** Posts filtered to a given tag and locale, newest first. */
+export async function getPostsByTag(tag: string, locale: "en" | "fr" = "fr"): Promise<BlogPost[]> {
+  const posts = await getAllPosts(locale);
   return posts.filter((p) => p.tags.includes(tag));
 }
 
