@@ -390,21 +390,18 @@ function DrawerLink({
   );
 }
 
-function LeverMark({ inverted }: { inverted: boolean }) {
+function LeverMark({ inverted: _inverted }: { inverted: boolean }) {
   return (
     <svg
-      width="24"
-      height="24"
-      viewBox="0 0 22 22"
+      width="28"
+      height="28"
+      viewBox="0 0 100 100"
       fill="none"
       aria-hidden="true"
-      className={cn(
-        "transition-colors duration-200 ease-soft",
-        inverted ? "text-white" : "text-neutral-90"
-      )}
     >
-      <path d="M3 15.5 L19 7" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
-      <path d="M7 18 L11 12 L15 18 Z" fill="currentColor" />
+      <rect width="100" height="100" rx="24" fill="#4F46E5" />
+      <path d="M30 30 L30 70 L70 70 Z" fill="white" fillOpacity="0.2" />
+      <path d="M28 35 L50 75 L85 25" stroke="white" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
