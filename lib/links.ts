@@ -6,6 +6,6 @@
  * host when staging graduates to production.
  */
 export const AUTH_LINKS = {
-  login: "https://staging.virtuslever.com/login",
-  signup: "https://staging.virtuslever.com/onboarding",
+  login: "https://app.virtuslever.com/login",
+  signup: "https://app.virtuslever.com/onboarding",
 } as const;
